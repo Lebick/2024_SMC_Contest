@@ -54,13 +54,11 @@ public class PlayerController : Controller
 
     private void UpdateMove()
     {
-        Vector3 previousPos = transform.position;
-
         Vector3 horizontal = transform.right * Input.GetAxisRaw("Horizontal");
         Vector3 vertical = transform.up * Input.GetAxisRaw("Vertical");
         moveDir = horizontal + vertical;
 
-        rigidBody.position = transform.position + moveDir * moveSpeed * 0.02f;
+        rigidBody.position = transform.position + moveDir.normalized * moveSpeed * 0.02f;
         
         bool isWalk = moveDir != Vector3.zero;
 

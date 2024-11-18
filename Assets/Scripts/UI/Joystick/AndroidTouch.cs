@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Joystick : MonoBehaviour
+public class AndroidTouch : MonoBehaviour
 {
     private List<Touch> touch;
     private Vector3 originalPosition;
@@ -24,6 +24,8 @@ public class Joystick : MonoBehaviour
 
     private void Start()
     {
+        if (!InputManager.instance.isAndroid) Destroy(gameObject);
+
         originalPosition = joystickCenter.position;
     }
 

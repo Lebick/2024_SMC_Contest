@@ -4,37 +4,26 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    protected float[] skillCD = new float[3];
-    protected float[] skillTimer = new float[3];
+    private Transform player;
 
-    protected virtual void Update()
+    private void Start()
     {
-        UpdateSkillCD();
+        if (player == null && GameManager.instance != null)
+            player = GameManager.instance.player.transform;
+
+        if (player == null)
+            Destroy(gameObject);
+
+        InputValueManager.instance.attackActions.AddListener(() => DefaultAttack());
     }
 
-    protected virtual void UpdateSkillCD()
+    private void Update()
     {
-        for(int i=0; i<skillTimer.Length; i++)
-        {
-            if (skillTimer[i] > 0)
-                skillTimer[i] -= Time.deltaTime;
-        }
+        //if()
     }
 
-    public virtual void Attack() { }
-
-    public virtual void Skill1()
+    private void DefaultAttack()
     {
-        skillTimer[0] = skillCD[0];
-    }
-
-    public virtual void Skill2()
-    {
-        skillTimer[1] = skillCD[1];
-    }
-
-    public virtual void Skill3()
-    {
-        skillTimer[2] = skillCD[2];
+        print($"Å×½ºÆ® : {name}");
     }
 }

@@ -40,6 +40,8 @@ public class CameraFollow : MonoBehaviour
         float lx = mapSize.x - screenSize.x;
         targetPosition.x = Mathf.Clamp(targetPosition.x, -lx + mapCenter.x, lx + mapCenter.x);
 
+        print($"√÷º“¡¬«• : {-lx + mapCenter.x}\n√÷¥Î¡¬«• : {lx + mapCenter.x}");
+
         float ly = mapSize.y - screenSize.y;
         targetPosition.y = Mathf.Clamp(targetPosition.y, -ly + mapCenter.y, ly + mapCenter.y);
 
@@ -49,6 +51,6 @@ public class CameraFollow : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(mapCenter, mapSize);
+        Gizmos.DrawWireCube(mapCenter, mapSize * 2);
     }
 }

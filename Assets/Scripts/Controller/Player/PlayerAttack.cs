@@ -19,11 +19,11 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
-        //if()
+        
     }
 
     private void DefaultAttack()
     {
-        print($"테스트 : {name}");
+        //아페잇는저글때린다
     }
 }

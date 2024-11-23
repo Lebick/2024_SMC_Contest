@@ -26,7 +26,7 @@ public class AndroidTouch : MonoBehaviour
     {
         if (!InputManager.instance.isAndroid) Destroy(gameObject);
 
-        originalPosition = joystickCenter.position;
+        originalPosition = joystickCenter.anchoredPosition;
     }
 
     private void Update()
@@ -89,8 +89,8 @@ public class AndroidTouch : MonoBehaviour
 
     private void JoystickPosReset()
     {
-        joystickCenter.position = Vector3.Lerp(joystickCenter.position, originalPosition, 50 * Time.deltaTime);
-        joystickMovePad.position = joystickCenter.position;
+        joystickCenter.anchoredPosition = Vector3.Lerp(joystickCenter.anchoredPosition, originalPosition, 50 * Time.deltaTime);
+        joystickMovePad.anchoredPosition = joystickCenter.anchoredPosition;
     }
 
     private void GetMoveDir()

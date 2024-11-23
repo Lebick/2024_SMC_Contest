@@ -54,9 +54,7 @@ public class PlayerController : Controller
 
     private void UpdateMove()
     {
-        Vector3 horizontal = transform.right * Input.GetAxisRaw("Horizontal");
-        Vector3 vertical = transform.up * Input.GetAxisRaw("Vertical");
-        moveDir = horizontal + vertical;
+        moveDir = InputValueManager.instance.moveDir;
 
         rigidBody.position = transform.position + moveDir.normalized * moveSpeed * 0.02f;
         

@@ -50,3 +50,9 @@ TagManager:
   - name: PlayerFront
     uniqueID: 848032745
     locked: 0
+  - name: FrontEffect
+    uniqueID: 2162290887
+    locked: 0
+  - name: UI
+    uniqueID: 3127525411
+    locked: 0

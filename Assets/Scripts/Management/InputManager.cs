@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InputManager : Singleton<InputManager>
@@ -14,6 +15,7 @@ public class InputManager : Singleton<InputManager>
     public KeyCode[] upKey        = { KeyCode.W, KeyCode.None };
     public KeyCode[] attackKey    = { KeyCode.Mouse0, KeyCode.None };
     public KeyCode[] dodgeKey     = { KeyCode.Space, KeyCode.None };
+    public KeyCode[] parryingKey  = { KeyCode.Mouse1, KeyCode.None };
 
     private float horizontal;
     private float vertical;
@@ -46,12 +48,29 @@ public class InputManager : Singleton<InputManager>
 
     private void SetInputAction()
     {
-        foreach(KeyCode key in attackKey)
+        KeyCode[] inputKeys = attackKey.Concat(dodgeKey).Concat(parryingKey).ToArray();
+
+        foreach (KeyCode key in inputKeys)
         {
             if (Input.GetKeyDown(key))
             {
-                InputValueManager.instance.attackActions?.Invoke();
-                break;
+                if (attackKey.Contains(key))
+                {
+                    InputValueManager.instance.attackAction?.Invoke();
+                    break;
+                }
+
+                if (dodgeKey.Contains(key))
+                {
+                    InputValueManager.instance.dodgeAction?.Invoke();
+                    break;
+                }
+
+                if (parryingKey.Contains(key))
+                {
+                    InputValueManager.instance.parryingAction?.Invoke();
+                    break;
+                }
             }
         }
     }

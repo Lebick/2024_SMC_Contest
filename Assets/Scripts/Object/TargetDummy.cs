@@ -21,7 +21,7 @@ public class TargetDummy : Controller
         player = GameManager.instance.player.transform;
     }
 
-    public override void GetDamage(int damage, Vector3 hitObjectPos = default, float knockback = 0)
+    public override void GetDamage(float damage, Vector3 hitObjectPos = default, float knockback = 0)
     {
         base.GetDamage(damage, hitObjectPos, knockback);
 
@@ -65,7 +65,11 @@ public class TargetDummy : Controller
         attackEffect.Play();
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(2f);
-        print("주변 공격");
+
+        if (isNearbyPlayer)
+        {
+            player.GetComponent<PlayerController>().GetDamage(0, transform.position, 0);
+        }
 
         yield return new WaitForSeconds(0.683f);
         isAttackState = false;

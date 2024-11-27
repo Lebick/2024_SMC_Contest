@@ -14,7 +14,7 @@ public class PlayerAttack : MonoBehaviour
         if (player == null)
             Destroy(gameObject);
 
-        InputValueManager.instance.attackActions.AddListener(() => DefaultAttack());
+        InputValueManager.instance.attackAction.AddListener(() => DefaultAttack());
     }
 
     private void Update()

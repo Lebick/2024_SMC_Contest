@@ -11,8 +11,8 @@ public class Controller : MonoBehaviour
     protected Rigidbody2D rigidBody;
     protected Animator animator;
 
-    public int maxHP;
-    public int hp;
+    public float maxHP;
+    public float hp;
 
     protected virtual void Awake()
     {
@@ -32,7 +32,7 @@ public class Controller : MonoBehaviour
         hp = Mathf.Clamp(hp, 0, maxHP);
     }
 
-    public virtual void GetDamage(int damage, Vector3 hitObjectPos = new Vector3(), float knockback = 0)
+    public virtual void GetDamage(float damage, Vector3 hitObjectPos = new Vector3(), float knockback = 0)
     {
         hp -= damage;
 

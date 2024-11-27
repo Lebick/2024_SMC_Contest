@@ -7,5 +7,7 @@ public class InputValueManager : Singleton<InputValueManager>
 {
     public Vector3 moveDir;
 
-    public UnityEvent attackActions;
+    public UnityEvent attackAction;
+    public UnityEvent dodgeAction;
+    public UnityEvent parryingAction;
 }

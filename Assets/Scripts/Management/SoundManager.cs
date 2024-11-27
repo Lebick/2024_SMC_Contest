@@ -12,8 +12,16 @@ public class SoundManager : Singleton<SoundManager>
         audioSource = GetComponent<AudioSource>();
     }
 
-    public void PlaySFX(AudioClip cilp, float volume = 1f)
+    public void PlaySFX(AudioClip clip, float volume = 1f, float pitch = 1f)
     {
-        audioSource.PlayOneShot(cilp, volume);
+        if(pitch == 1f)
+            audioSource.PlayOneShot(clip, volume);
+        else
+        {
+            AudioSource tempSource = gameObject.AddComponent<AudioSource>();
+            tempSource.pitch = pitch;
+            tempSource.PlayOneShot(clip, volume);
+            Destroy(tempSource, clip.length);
+        }
     }
 }

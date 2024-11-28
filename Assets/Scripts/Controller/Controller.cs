@@ -14,6 +14,8 @@ public class Controller : MonoBehaviour
     public float maxHP;
     public float hp;
 
+    public bool isInvincibility;
+
     protected virtual void Awake()
     {
         hp = maxHP;

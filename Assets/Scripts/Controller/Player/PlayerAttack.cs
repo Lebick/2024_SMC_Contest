@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class PlayerAttack : MonoBehaviour
 
     public LayerMask enemyMask;
 
+    public float stopPosRange;
+    private float acceleration;
+
     private void Start()
     {
         if (player == null)
@@ -19,9 +23,23 @@ public class PlayerAttack : MonoBehaviour
         InputValueManager.instance.attackAction.AddListener(() => DefaultAttack());
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        
+        FollowPlayer();
+    }
+
+    private void FollowPlayer()
+    {
+        if (stopPosRange > Vector3.Distance(transform.position, player.position))
+        {
+            acceleration = Mathf.Lerp(acceleration, 0f, 0.02f);
+        }
+        else
+        {
+            acceleration = Vector3.Distance(transform.position, player.position) * 0.01f;
+        }
+
+        transform.position = Vector3.Lerp(transform.position, player.position, acceleration);
     }
 
     private void DefaultAttack()
@@ -29,6 +47,8 @@ public class PlayerAttack : MonoBehaviour
         GameObject attackTarget = GetNearestEnemy();
 
         if (attackTarget == null) return;
+
+        
     }
 
     private GameObject GetNearestEnemy()
@@ -47,5 +67,8 @@ public class PlayerAttack : MonoBehaviour
 
         Gizmos.color = Color.blue;  
         Gizmos.DrawWireSphere(player.position, attackRange);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(player.position, stopPosRange);
     }
 }

@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class PlayerAttack : MonoBehaviour
 {
-    private Transform player;
+    public Transform player;
+
+    public float attackRange;
+
+    public LayerMask enemyMask;
 
     private void Start()
     {
-        if (player == null && GameManager.instance != null)
-            player = GameManager.instance.player.transform;
-
         if (player == null)
             Destroy(gameObject);
 
@@ -24,6 +26,26 @@ public class PlayerAttack : MonoBehaviour
 
     private void DefaultAttack()
     {
-        //아페잇는저글때린다
+        GameObject attackTarget = GetNearestEnemy();
+
+        if (attackTarget == null) return;
+    }
+
+    private GameObject GetNearestEnemy()
+    {
+        Collider2D[] nearEnemys = Physics2D.OverlapCircleAll(player.position, attackRange, enemyMask);
+
+        if (nearEnemys.Length <= 0)
+            return null;
+
+        return nearEnemys.OrderBy(a => Vector3.Distance(player.position, a.transform.position)).First().gameObject;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (player == null) return;
+
+        Gizmos.color = Color.blue;  
+        Gizmos.DrawWireSphere(player.position, attackRange);
     }
 }

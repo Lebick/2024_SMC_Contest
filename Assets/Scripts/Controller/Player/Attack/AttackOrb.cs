@@ -5,21 +5,26 @@ using UnityEngine;
 
 public class AttackOrb : MonoBehaviour
 {
-    private LineRenderer lineRenderer;
+    private TrailRenderer trailRenderer;
 
+    private int pullingIndex;
     private Transform targetTransform;
 
+    public float moveTime = 0.2f; // 해당 값만큼의 시간동안 적에게 이동
     public GameObject hitEffect;
 
     private float damage;
 
     private void Start()
     {
-        lineRenderer = GetComponent<LineRenderer>();
+        trailRenderer = GetComponent<TrailRenderer>();
+        trailRenderer.time = moveTime;
     }
 
-    public void Setting(Transform target, float damage)
+    public void Setting(int pullingIndex, Vector3 startPos, Transform target, float damage)
     {
+        this.pullingIndex = pullingIndex;
+        transform.position = startPos;
         targetTransform = target;
         this.damage = damage;
 
@@ -35,14 +40,13 @@ public class AttackOrb : MonoBehaviour
         float progress = 0f;
         while (progress < 1f)
         {
-            //if (GamePlayManager.instance.isCutScene || GamePlayManager.instance.isPause)
-            //{
-            //    yield return null;
-            //    continue;
-            //}
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
 
-
-            progress += Time.deltaTime;
+            progress += Time.deltaTime / moveTime;
             p3 = targetTransform.position;
             Vector3 p4 = Vector3.Lerp(p1, p2, progress);
             Vector3 p5 = Vector3.Lerp(p2, p3, progress);
@@ -56,6 +60,9 @@ public class AttackOrb : MonoBehaviour
             Instantiate(hitEffect, transform.position, Quaternion.identity);
         }
 
+        yield return new WaitForSeconds(trailRenderer.time);
+
+        ObjectPulling.instance.SetReadyObject(gameObject, pullingIndex);
         gameObject.SetActive(false);
     }
 }

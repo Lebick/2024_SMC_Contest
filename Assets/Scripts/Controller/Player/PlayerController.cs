@@ -28,7 +28,6 @@ public class PlayerController : Controller
     public AudioClip[] walkClip;
 
     private bool isCanMovement;
-    private bool isInvincibility;
 
     public float dodgeCD = 0.6f;
     private float dodgeTimer;

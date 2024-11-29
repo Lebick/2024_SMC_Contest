@@ -37,10 +37,6 @@ public class TargetDummy : Controller
         if (hp < maxHP)
             hp += (int)(100 * Time.deltaTime);
 
-        //юс╫ц
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-            GetDamage(5);
-
         if(isAttackDummy)
             Attack();
     }

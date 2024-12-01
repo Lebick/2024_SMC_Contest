@@ -52,8 +52,14 @@ MonoBehaviour:
   deathEffect: {fileID: 0}
   maxHP: 100
   hp: 100
+  isInvincibility: 0
   playerHUD: {fileID: 0}
   moveSpeed: 5
+  walkClip:
+  - {fileID: 8300000, guid: 79096bfadb6091b40bff1b797592683f, type: 3}
+  - {fileID: 8300000, guid: f1fa831794cc2ff4d8eb8b5aaa7f40cd, type: 3}
+  dodgeCD: 0.6
+  parryingClip: {fileID: 8300000, guid: 8064ff5e15ea97648b197a1a96b751c9, type: 3}
 --- !u!212 &6950896977798499425
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -95,7 +101,8 @@ SpriteRenderer:
   m_SortingLayerID: 611534791
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -132,7 +139,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &541434187909229587
 CircleCollider2D:
   m_ObjectHideFlags: 0

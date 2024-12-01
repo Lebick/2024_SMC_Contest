@@ -10,4 +10,5 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     {
         Instantiate(fadeCanvas).GetComponent<SceneLoad>().LoadScene(sceneName);
     }
+    //
 }

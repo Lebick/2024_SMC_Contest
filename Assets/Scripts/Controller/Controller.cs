@@ -7,31 +7,29 @@ public class Controller : MonoBehaviour
 {
     public GameObject damageEffect;
     public GameObject deathEffect;
-    protected SpriteRenderer spriteRenderer;
     protected Rigidbody2D rigidBody;
     protected Animator animator;
 
     public float maxHP;
-    public float hp;
+    private float _hp;
+    public float hp
+    {
+        get{ return _hp; }
+        set{ _hp = Mathf.Min(value, maxHP); }
+    }
 
     public bool isInvincibility;
 
     protected virtual void Awake()
     {
-        hp = maxHP;
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        hp = maxHP; 
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
 
     protected virtual void Update()
     {
-        ClampValue();
-    }
 
-    protected virtual void ClampValue()
-    {
-        hp = Mathf.Clamp(hp, 0, maxHP);
     }
 
     public virtual void GetDamage(float damage, Vector3 hitObjectPos = new Vector3(), float knockback = 0)
@@ -44,7 +42,10 @@ public class Controller : MonoBehaviour
 
     protected virtual void OnDeath()
     {
-        Instantiate(deathEffect, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        if (deathEffect != null)
+            Instantiate(deathEffect, transform.position, Quaternion.identity);
+
+        if("a".Equals("b")) //юс╫ц
+            Destroy(gameObject);
     }
 }

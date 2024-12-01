@@ -11,7 +11,11 @@ public class ObjectPulling : Singleton<ObjectPulling>
 
     public int RegisterObject(GameObject prefab)
     {
-        pullingObj.Add(new PullingObj(prefab));
+        foreach(PullingObj obj in pullingObj)
+            if (obj.prefab == prefab)
+                return obj.pullingIndex;
+
+        pullingObj.Add(new PullingObj(prefab, pullingObj.Count));
 
         return pullingObj.Count - 1;
     }
@@ -51,10 +55,12 @@ public class PullingObj
 {
     public GameObject parent;
     public GameObject prefab;
+    public int pullingIndex;
     public List<GameObject> activateList = new List<GameObject>();
 
-    public PullingObj(GameObject prefab)
+    public PullingObj(GameObject prefab, int pullingIndex)
     {
         this.prefab = prefab;
+        this.pullingIndex = pullingIndex;
     }
 }

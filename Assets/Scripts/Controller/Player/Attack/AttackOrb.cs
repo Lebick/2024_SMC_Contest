@@ -7,7 +7,8 @@ public class AttackOrb : MonoBehaviour
 {
     private TrailRenderer trailRenderer;
 
-    private int pullingIndex;
+    private int myPullingIndex;
+    private int getPullingIndex;
     private Transform targetTransform;
 
     public float moveTime = 0.2f; // 해당 값만큼의 시간동안 적에게 이동
@@ -19,11 +20,13 @@ public class AttackOrb : MonoBehaviour
     {
         trailRenderer = GetComponent<TrailRenderer>();
         trailRenderer.time = moveTime;
+
+        myPullingIndex = ObjectPulling.instance.RegisterObject(hitEffect);
     }
 
     public void Setting(int pullingIndex, Vector3 startPos, Transform target, float damage)
     {
-        this.pullingIndex = pullingIndex;
+        this.getPullingIndex = pullingIndex;
         transform.position = startPos;
         targetTransform = target;
         this.damage = damage;
@@ -57,12 +60,14 @@ public class AttackOrb : MonoBehaviour
         if(targetTransform.TryGetComponent<Controller>(out Controller enemy) && !enemy.isInvincibility)
         {
             enemy.GetDamage(damage);
-            Instantiate(hitEffect, transform.position, Quaternion.identity);
+            
+            AttackHit attackEffect = ObjectPulling.instance.GetObject(myPullingIndex).GetComponent<AttackHit>();
+            attackEffect.Setting(myPullingIndex, transform.position);
         }
 
         yield return new WaitForSeconds(trailRenderer.time);
 
-        ObjectPulling.instance.SetReadyObject(gameObject, pullingIndex);
+        ObjectPulling.instance.SetReadyObject(gameObject, getPullingIndex);
         gameObject.SetActive(false);
     }
 }

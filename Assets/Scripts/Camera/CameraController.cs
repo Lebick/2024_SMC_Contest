@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class CameraController : Singleton<CameraController>
 {
     private Transform player;
 
@@ -12,10 +12,17 @@ public class CameraFollow : MonoBehaviour
 
     private Vector2 screenSize;
 
+    private Vector3 currentPosition;
+
+    private IEnumerator shakeCoroutine;
+    private Vector3 shakePosition;
+
     private void Start()
     {
         screenSize.y = Camera.main.orthographicSize;
         screenSize.x = screenSize.y * Screen.width / Screen.height;
+
+        currentPosition = transform.position;
     }
 
     private void FixedUpdate()
@@ -43,7 +50,31 @@ public class CameraFollow : MonoBehaviour
         float ly = mapSize.y - screenSize.y;
         targetPosition.y = Mathf.Clamp(targetPosition.y, -ly + mapCenter.y, ly + mapCenter.y);
 
-        transform.position = Vector3.Lerp(transform.position, targetPosition, 0.02f * followingSpeed);
+        currentPosition = Vector3.Lerp(currentPosition, targetPosition, 0.02f * followingSpeed);
+        transform.position = currentPosition + shakePosition;
+    }
+
+    public void CameraShake(float strength, float time)
+    {
+        if(shakeCoroutine != null)
+            StopCoroutine(shakeCoroutine);
+
+        shakeCoroutine = ShakeCoroutine(strength, time);
+        StartCoroutine(shakeCoroutine);
+    }
+
+    private IEnumerator ShakeCoroutine(float strength, float time)
+    {
+        float progress = 0;
+
+        while (progress <= 1f)
+        {
+            shakePosition = Random.insideUnitCircle * strength;
+            progress += Time.deltaTime / time;
+            yield return null;
+        }
+
+        shakePosition = Vector3.zero;
     }
 
     private void OnDrawGizmos()

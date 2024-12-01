@@ -12,6 +12,7 @@ public class PlayerAttack : MonoBehaviour
 
     // ------------------¼³Á¤------------------
 
+    public  AudioClip[] attackClips;
     public  Transform player;
 
     public  float   attackRange;
@@ -24,9 +25,9 @@ public class PlayerAttack : MonoBehaviour
     public  int     damage;
 
     public  int     attackMaxCount;
-    private int     attackCurrentCount;
+    public int     attackCurrentCount;
     public  float   attackCD;
-    private float   attackTimer;
+    public float   attackTimer;
 
     // ----------------------------------------
 
@@ -79,7 +80,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void RecoveryAttackOrb()
     {
-        attackTimer += 1 / Time.fixedDeltaTime;
+        attackTimer += 1 * Time.fixedDeltaTime;
         if(attackTimer >= attackCD)
         {
             attackTimer -= attackCD;
@@ -94,6 +95,10 @@ public class PlayerAttack : MonoBehaviour
         GameObject attackTarget = GetNearestEnemy();
 
         if (attackTarget == null || attackCurrentCount <= 0) return;
+
+        attackCurrentCount--;
+
+        SoundManager.instance.PlaySFX(attackClips[Random.Range(0, attackClips.Length)], 0.1f);
 
         AttackOrb orb = ObjectPulling.instance.GetObject(myPullingIndex).GetComponent<AttackOrb>();
         orb.Setting(myPullingIndex, transform.position, attackTarget.transform, damage);

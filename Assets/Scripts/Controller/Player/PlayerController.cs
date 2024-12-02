@@ -150,6 +150,12 @@ public class PlayerController : Controller
 
         while(timer <= 0.2f)
         {
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
             timer += Time.deltaTime;
             rigidBody.position += dodgeDir * Time.deltaTime * 10f;
             yield return null;

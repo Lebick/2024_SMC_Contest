@@ -29,6 +29,12 @@ public class SceneLoad : MonoBehaviour
 
         while (progress <= 1.0f)
         {
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
             progress += Time.deltaTime;
             fadeImage.anchoredPosition = Vector3.Lerp(new(width, 0), new(-width, 0), progress);
 
@@ -39,6 +45,12 @@ public class SceneLoad : MonoBehaviour
 
                 while(sc.progress < 0.9f && waitTimer <= 1f)
                 {
+                    if (GameManager.instance.isPause)
+                    {
+                        yield return null;
+                        continue;
+                    }
+
                     waitTimer += Time.deltaTime;
                     yield return null;
                 }

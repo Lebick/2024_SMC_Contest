@@ -69,6 +69,12 @@ public class CameraController : Singleton<CameraController>
 
         while (progress <= 1f)
         {
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
             shakePosition = Random.insideUnitCircle * strength;
             progress += Time.deltaTime / time;
             yield return null;

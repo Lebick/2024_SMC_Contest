@@ -1,7 +1,9 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class AquaBoss : Controller
 {
@@ -35,6 +37,12 @@ public class AquaBoss : Controller
     public ParticleSystem pattern2Effect;
     #endregion
 
+    #region 패턴8
+    public GameObject pattern8Whirlpool;
+    private int pattern8WhirlpoolPullingIndex;
+    public ParticleSystem pattern8Effect;
+    #endregion
+
     #region 패턴9
     [Space(10)]
     public GameObject whirlpool;
@@ -49,6 +57,7 @@ public class AquaBoss : Controller
         circleCollider = GetComponent<CircleCollider2D>();
 
         warningPullingIndex = ObjectPulling.instance.RegisterObject(warningMark);
+        pattern8WhirlpoolPullingIndex = ObjectPulling.instance.RegisterObject(pattern8Whirlpool);
     }
 
     protected override void Update()
@@ -120,6 +129,12 @@ public class AquaBoss : Controller
         //앞으로 발사하며 뒤로 밀려남
         while (true)
         {
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
             timer += Time.deltaTime;
             timer = Mathf.Clamp01(timer);
 
@@ -150,6 +165,12 @@ public class AquaBoss : Controller
         float progress = 0f;
         while (progress < 1f)
         {
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
             progress += Time.deltaTime * 2f;
             Vector3 p1 = Vector3.Lerp(pos, center, progress);
             Vector3 p2 = Vector3.Lerp(center, stunPos, progress);
@@ -170,6 +191,12 @@ public class AquaBoss : Controller
         progress = 0f;
         while (progress < 1f)
         {
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
             progress += Time.deltaTime * 2f;
             Vector3 p1 = Vector3.Lerp(pos, center, progress);
             Vector3 p2 = Vector3.Lerp(center, stunPos, progress);
@@ -215,11 +242,18 @@ public class AquaBoss : Controller
 
     private IEnumerator Pattern8()
     {
-        //(스프라이트 만들 수 있으면) n초간 회전, 벽돌깨기 게임처럼 벽에 부딪힐 시 반사됨.
-        //플레이어 닿을 시 플레이어 잡음, 플레이어에게 일정 데미지 주고 날려보냄
-        //회피불가, 패링불가
+        //n초간 회전, 벽에 부딪힐 시 반사됨.
+        //회피가능, 패링가능
 
-        yield return new WaitForSeconds(1.0f); //1초간 준비동작
+        //--------------1.5초간 준비동작----------------
+        pattern8Effect.Play();
+        animator.SetInteger("currentPattern", 8);
+        animator.SetTrigger("setPattern");
+
+        yield return new WaitForSeconds(1.5f);
+
+        //----------------회전하며 이동--------------------
+        animator.SetTrigger("endPattern");
 
         float x = Mathf.Cos(facingAngle * Mathf.Deg2Rad);
         float y = Mathf.Sin(facingAngle * Mathf.Deg2Rad);
@@ -231,13 +265,23 @@ public class AquaBoss : Controller
 
         int collisionCount = 0;
 
-        while(collisionCount <= 5)
+        List<Whirlpool> whirlpools = new();
+
+        int randomCount = Random.Range(5, 9);
+
+        while(collisionCount <= randomCount)
         {
-            Vector3 nextPos = transform.position + moveDir * Time.deltaTime * 5f;
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
+            Vector3 nextPos = transform.position + moveDir * Time.deltaTime * (collisionCount * 0.5f + 1) * 10f;
 
             if (nextPos != MovePosClamp(nextPos))
             {
-                collisionCount--;
+                collisionCount++;
                 Vector3 dir = (nextPos - transform.position).normalized; //방향값
 
                 Vector3 detectOffset = dir * circleCollider.radius * 2.0f;
@@ -248,11 +292,103 @@ public class AquaBoss : Controller
                 RaycastHit2D hit = Physics2D.Linecast(center, fixPos, LayerMask.GetMask("Wall"));
 
                 moveDir = Vector3.Reflect(moveDir, hit.normal);
+
+                GameObject whirlpool = ObjectPulling.instance.GetObject(pattern8WhirlpoolPullingIndex);
+                whirlpools.Add(whirlpool.GetComponent<Whirlpool>());
+                whirlpools[^1].Setting(pattern8WhirlpoolPullingIndex, transform.position);
             }
 
             transform.position = MovePosClamp(nextPos);
             yield return null;
         }
+
+        //--------------중간 위치로 이동----------------
+
+        animator.SetTrigger("endPattern");
+        pattern8Effect.Stop();
+
+        Vector2 p1 = transform.position;
+        Vector2 p3 = Vector2.zero;
+
+        Vector2 dir2 = (Quaternion.Euler(0, 0, 90) * (p3 - p1)).normalized;
+        float angle = Mathf.Atan2(dir2.y, dir2.x) * Mathf.Rad2Deg;
+
+        Vector2 p2 = p1 + (Vector2)(Quaternion.Euler(0, 0, 20f * Mathf.Sign(angle)) * (p3 - p1));
+
+        float progress = 0f;
+        while (progress < 1f)
+        {
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
+            progress += Time.deltaTime * 2f;
+            Vector3 p4 = Vector3.Lerp(p1, p2, progress);
+            Vector3 p5 = Vector3.Lerp(p2, p3, progress);
+            transform.position = Vector3.Lerp(p4, p5, progress);
+            yield return null;
+        }
+
+        //---------------점프--------------
+
+        progress = 0f;
+        Vector2 p6 = Vector2.up * 5f;
+
+        while (progress < 1f)
+        {
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
+            progress += Time.deltaTime * 2f;
+            Vector3 p4 = Vector3.Lerp(p3, p6, progress);
+            Vector3 p5 = Vector3.Lerp(p6, p3, progress);
+            transform.position = Vector3.Lerp(p4, p5, progress);
+            yield return null;
+        }
+
+        CameraController.instance.CameraShake(0.1f, 0.5f);
+
+        //--------------소용돌이 중앙으로----------------
+
+        animator.SetTrigger("endPattern");
+
+        progress = 0f;
+        List<Vector3> whirlpoolPos1 = new();
+        List<Vector3> whirlpoolPos2 = new();
+
+        foreach (var pos in whirlpools)
+        {
+            whirlpoolPos1.Add(pos.transform.position); //초기 위치들
+            whirlpoolPos2.Add(pos.transform.position + (Quaternion.Euler(0, 0, Random.Range(60f, 90f)) * (Vector3.zero - pos.transform.position)));
+        }
+
+        while (progress < 1f)
+        {
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
+            progress += Time.deltaTime;
+            foreach (var obj in whirlpools)
+            {
+                int myIndex = whirlpools.IndexOf(obj);
+                Vector3 pa = Vector3.Lerp(whirlpoolPos1[myIndex], whirlpoolPos2[myIndex], progress);
+                Vector3 pb = Vector3.Lerp(whirlpoolPos2[myIndex], Vector3.zero, progress);
+                obj.transform.position = Vector3.Lerp(pa, pb, progress);
+            }
+
+            yield return null;
+        }
+
+        foreach (var obj in whirlpools)
+            obj.ForceStop();
 
         yield return null;
     }

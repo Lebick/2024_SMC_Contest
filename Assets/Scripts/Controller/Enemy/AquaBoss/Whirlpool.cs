@@ -44,4 +44,14 @@ public class Whirlpool : MonoBehaviour, IPullingObj
         ObjectPulling.instance.SetReadyObject(gameObject, myPullingIndex);
         gameObject.SetActive(false);
     }
+
+    public void ForceStop()
+    {
+        isCheckTrigger = false;
+
+        if(IsInvoking(nameof(StopCheck)))
+            CancelInvoke(nameof(StopCheck));
+
+        particle.Stop();
+    }
 }

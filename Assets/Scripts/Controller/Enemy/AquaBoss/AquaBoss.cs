@@ -61,6 +61,9 @@ public class AquaBoss : Controller
         if (Input.GetKeyDown(KeyCode.U))
             StartCoroutine(Pattern2());
 
+        if (Input.GetKeyDown(KeyCode.I))
+            StartCoroutine(Pattern8());
+
         SetSprite();
     }
 
@@ -88,7 +91,7 @@ public class AquaBoss : Controller
 
     #region 패턴들
 
-    //패링 가능 공격 시전 시, 보스 몸을 잠깐 빨갛게 만들든 뭘하든 해서 패링 가능하다는걸 알려야함.
+    //팰라 가능 공격 시전 시, 보스 몸을 잠깐 빨갛게 만들든 뭘하든 해서 팰라 가능하다는걸 알려야함.
 
     private IEnumerator Pattern0()
     {
@@ -122,7 +125,7 @@ public class AquaBoss : Controller
 
             float acceleration = Mathf.Pow(timer, 3f);
 
-            Vector3 nextPos = transform.position + Quaternion.Euler(0, 0, -facingAngle) * Vector3.left * acceleration;
+            Vector3 nextPos = transform.position + Quaternion.Euler(0, 0, -facingAngle) * Vector3.left * acceleration * Time.deltaTime * 50f;
 
             if (nextPos != MovePosClamp(nextPos))
             {
@@ -181,6 +184,8 @@ public class AquaBoss : Controller
     private IEnumerator Pattern3()
     {
         // 전기구슬 n회 발사, 발사 0.5초 전까지 플레이어를 봄 / 패링 불가능
+
+
         yield return null;
     }
 
@@ -213,6 +218,42 @@ public class AquaBoss : Controller
         //(스프라이트 만들 수 있으면) n초간 회전, 벽돌깨기 게임처럼 벽에 부딪힐 시 반사됨.
         //플레이어 닿을 시 플레이어 잡음, 플레이어에게 일정 데미지 주고 날려보냄
         //회피불가, 패링불가
+
+        yield return new WaitForSeconds(1.0f); //1초간 준비동작
+
+        float x = Mathf.Cos(facingAngle * Mathf.Deg2Rad);
+        float y = Mathf.Sin(facingAngle * Mathf.Deg2Rad);
+
+        x = (Mathf.Abs(x) > 0 ? 1f : -1f);
+        y = (Mathf.Abs(y) > 0 ? 1f : -1f);
+
+        Vector3 moveDir = new Vector3(x, y).normalized;
+
+        int collisionCount = 0;
+
+        while(collisionCount <= 5)
+        {
+            Vector3 nextPos = transform.position + moveDir * Time.deltaTime * 5f;
+
+            if (nextPos != MovePosClamp(nextPos))
+            {
+                collisionCount--;
+                Vector3 dir = (nextPos - transform.position).normalized; //방향값
+
+                Vector3 detectOffset = dir * circleCollider.radius * 2.0f;
+
+                Vector3 center = transform.position + (Vector3)circleCollider.offset;
+                Vector3 fixPos = nextPos + detectOffset + (Vector3)circleCollider.offset;
+
+                RaycastHit2D hit = Physics2D.Linecast(center, fixPos, LayerMask.GetMask("Wall"));
+
+                moveDir = Vector3.Reflect(moveDir, hit.normal);
+            }
+
+            transform.position = MovePosClamp(nextPos);
+            yield return null;
+        }
+
         yield return null;
     }
 

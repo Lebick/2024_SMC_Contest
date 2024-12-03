@@ -8,7 +8,7 @@ public class PlayerAttack : MonoBehaviour
 {
     // ------------------풀링------------------
     public GameObject attackPrefab;
-    private int myPullingIndex;
+    private int myPoolingIndex;
 
     // ------------------설정------------------
 
@@ -36,7 +36,7 @@ public class PlayerAttack : MonoBehaviour
         if (player == null)
             Destroy(gameObject);
 
-        myPullingIndex = ObjectPulling.instance.RegisterObject(attackPrefab);
+        myPoolingIndex = ObjectPooling.instance.RegisterObject(attackPrefab);
         InputValueManager.instance.attackAction.AddListener(() => DefaultAttack());
     }
 
@@ -100,8 +100,8 @@ public class PlayerAttack : MonoBehaviour
 
         SoundManager.instance.PlaySFX(attackClips[Random.Range(0, attackClips.Length)], 0.1f);
 
-        AttackOrb orb = ObjectPulling.instance.GetObject(myPullingIndex).GetComponent<AttackOrb>();
-        orb.Setting(myPullingIndex, transform.position, attackTarget.transform, damage);
+        AttackOrb orb = ObjectPooling.instance.GetObject(myPoolingIndex).GetComponent<AttackOrb>();
+        orb.Setting(myPoolingIndex, transform.position, attackTarget.transform, damage);
     }
 
     private GameObject GetNearestEnemy()

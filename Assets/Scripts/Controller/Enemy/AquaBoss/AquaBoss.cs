@@ -24,7 +24,7 @@ public class AquaBoss : Controller
     public ParticleSystem stunEffect;
 
     public GameObject warningMark;
-    private int warningPullingIndex;
+    private int warningPoolingIndex;
 
     #region 패턴2
     [Space(10)]
@@ -37,9 +37,16 @@ public class AquaBoss : Controller
     public ParticleSystem pattern2Effect;
     #endregion
 
+    #region 패턴3
+    public GameObject pattern3Orb;
+    public GameObject pattern3ChildOrb;
+    private int pattern3OrbPoolingIndex;
+    private int pattern3ChildOrbPoolingIndex;
+    #endregion
+
     #region 패턴8
     public GameObject pattern8Whirlpool;
-    private int pattern8WhirlpoolPullingIndex;
+    private int pattern8WhirlpoolPoolingIndex;
     public ParticleSystem pattern8Effect;
     #endregion
 
@@ -56,8 +63,12 @@ public class AquaBoss : Controller
     {
         circleCollider = GetComponent<CircleCollider2D>();
 
-        warningPullingIndex = ObjectPulling.instance.RegisterObject(warningMark);
-        pattern8WhirlpoolPullingIndex = ObjectPulling.instance.RegisterObject(pattern8Whirlpool);
+        warningPoolingIndex = ObjectPooling.instance.RegisterObject(warningMark);
+
+        pattern3OrbPoolingIndex = ObjectPooling.instance.RegisterObject(pattern3Orb);
+        pattern3ChildOrbPoolingIndex = ObjectPooling.instance.RegisterObject(pattern3ChildOrb);
+
+        pattern8WhirlpoolPoolingIndex = ObjectPooling.instance.RegisterObject(pattern8Whirlpool);
     }
 
     protected override void Update()
@@ -100,7 +111,7 @@ public class AquaBoss : Controller
 
     #region 패턴들
 
-    //팰라 가능 공격 시전 시, 보스 몸을 잠깐 빨갛게 만들든 뭘하든 해서 팰라 가능하다는걸 알려야함.
+    //패링 가능 공격 시전 시, 보스 몸을 잠깐 빨갛게 만들어 경고표시.
 
     private IEnumerator Pattern0()
     {
@@ -210,7 +221,18 @@ public class AquaBoss : Controller
 
     private IEnumerator Pattern3()
     {
-        // 전기구슬 n회 발사, 발사 0.5초 전까지 플레이어를 봄 / 패링 불가능
+        animator.SetInteger("currentPattern", 3);
+        animator.SetTrigger("setPattern");
+        yield return new WaitForSeconds(1.0f);
+
+        int randomCount = Random.Range(3, 6);
+        for(int i=0; i<randomCount; i++)
+        {
+            ObjectPooling.instance.GetObject(pattern3OrbPoolingIndex);
+            yield return new WaitForSeconds(1.0f);
+            ObjectPooling.instance.GetObject(pattern3ChildOrbPoolingIndex)
+                .GetComponent<ElectricOrb>().Setting(pattern3ChildOrbPoolingIndex, sharkMouthTransform.position, pattern3ChildOrbPoolingIndex);
+        }
 
 
         yield return null;
@@ -293,9 +315,9 @@ public class AquaBoss : Controller
 
                 moveDir = Vector3.Reflect(moveDir, hit.normal);
 
-                GameObject whirlpool = ObjectPulling.instance.GetObject(pattern8WhirlpoolPullingIndex);
+                GameObject whirlpool = ObjectPooling.instance.GetObject(pattern8WhirlpoolPoolingIndex);
                 whirlpools.Add(whirlpool.GetComponent<Whirlpool>());
-                whirlpools[^1].Setting(pattern8WhirlpoolPullingIndex, transform.position);
+                whirlpools[^1].Setting(pattern8WhirlpoolPoolingIndex, transform.position);
             }
 
             transform.position = MovePosClamp(nextPos);
@@ -410,7 +432,7 @@ public class AquaBoss : Controller
             Vector2 spawnPos = pos[randomIndex].position;
             pos.RemoveAt(randomIndex);
 
-            ObjectPulling.instance.GetObject(warningPullingIndex).GetComponent<WarningMark>().Setting(warningPullingIndex, spawnPos, 1f, whirlpool);
+            ObjectPooling.instance.GetObject(warningPoolingIndex).GetComponent<WarningMark>().Setting(warningPoolingIndex, spawnPos, 1f, whirlpool);
 
             yield return new WaitForSeconds(0.2f);
         }
@@ -419,12 +441,6 @@ public class AquaBoss : Controller
     }
 
     private IEnumerator Pattern10()
-    {
-        //보호막 생성, 보스의 근접공격 패링 시 보호막 해제.
-        yield return null;
-    }
-
-    private IEnumerator Pattern11()
     {
         yield return null;
     }

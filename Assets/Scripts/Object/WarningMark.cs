@@ -7,19 +7,19 @@ public class WarningMark : MonoBehaviour
     public Transform warningFill;
 
     private float warningTime;
-    private int getPullingIndex;
-    private int myPullingIndex;
+    private int getPoolingIndex;
+    private int myPoolingIndex;
 
-    public void Setting(int pullingIndex, Vector2 summonPos, float warningTime, GameObject warningAfterSummonObj = null)
+    public void Setting(int poolingIndex, Vector2 summonPos, float warningTime, GameObject warningAfterSummonObj = null)
     {
         transform.position = summonPos;
 
-        getPullingIndex = pullingIndex;
+        getPoolingIndex = poolingIndex;
 
         if (warningAfterSummonObj != null)
-            myPullingIndex = ObjectPulling.instance.RegisterObject(warningAfterSummonObj);
+            myPoolingIndex = ObjectPooling.instance.RegisterObject(warningAfterSummonObj);
         else
-            myPullingIndex = -1;
+            myPoolingIndex = -1;
 
         this.warningTime = warningTime;
 
@@ -55,8 +55,8 @@ public class WarningMark : MonoBehaviour
             yield return null;
         }
 
-        if(myPullingIndex != -1)
-            ObjectPulling.instance.GetObject(myPullingIndex).GetComponent<IPullingObj>().Setting(myPullingIndex, transform.position);
+        if(myPoolingIndex != -1)
+            ObjectPooling.instance.GetObject(myPoolingIndex).GetComponent<IPoolingObj>().Setting(myPoolingIndex, transform.position);
 
         originalColor.a = 0f;
         mySpriteRenderer.color = originalColor;
@@ -76,7 +76,7 @@ public class WarningMark : MonoBehaviour
             yield return null;
         }
 
-        ObjectPulling.instance.SetReadyObject(gameObject, getPullingIndex);
+        ObjectPooling.instance.SetReadyObject(gameObject, getPoolingIndex);
         gameObject.SetActive(false);
     }
 }

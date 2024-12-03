@@ -3,42 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ObjectPulling : Singleton<ObjectPulling>
+public class ObjectPooling : Singleton<ObjectPooling>
 {
-    public Transform pullingObjParent;
+    public Transform poolingObjParent;
 
-    public List<PullingObj> pullingObj = new List<PullingObj>();
+    public List<PoolingObj> poolingObj = new List<PoolingObj>();
 
     public int RegisterObject(GameObject prefab)
     {
-        foreach(PullingObj obj in pullingObj)
+        foreach(PoolingObj obj in poolingObj)
             if (obj.prefab == prefab)
-                return obj.pullingIndex;
+                return obj.poolingIndex;
 
-        pullingObj.Add(new PullingObj(prefab, pullingObj.Count));
+        poolingObj.Add(new PoolingObj(prefab, poolingObj.Count));
 
-        return pullingObj.Count - 1;
+        return poolingObj.Count - 1;
     }
 
     public GameObject GetObject(int myIndex)
     {
-        Transform parent = pullingObjParent.Find(pullingObj[myIndex].prefab.name);
+        Transform parent = poolingObjParent.Find(poolingObj[myIndex].prefab.name);
         GameObject obj;
 
         if (parent == null)
         {
-            parent = new GameObject(pullingObj[myIndex].prefab.name).transform;
-            parent.SetParent(pullingObjParent, false);
+            parent = new GameObject(poolingObj[myIndex].prefab.name).transform;
+            parent.SetParent(poolingObjParent, false);
         }
 
-        if (pullingObj[myIndex].activateList.Count > 0)
+        if (poolingObj[myIndex].activateList.Count > 0)
         {
-            obj = pullingObj[myIndex].activateList[0];
-            pullingObj[myIndex].activateList.RemoveAt(0);
+            obj = poolingObj[myIndex].activateList[0];
+            poolingObj[myIndex].activateList.RemoveAt(0);
         }
 
         else
-            obj = Instantiate(pullingObj[myIndex].prefab, parent);
+            obj = Instantiate(poolingObj[myIndex].prefab, parent);
 
         obj.SetActive(true);
 
@@ -47,20 +47,20 @@ public class ObjectPulling : Singleton<ObjectPulling>
 
     public void SetReadyObject(GameObject obj, int myIndex)
     {
-        pullingObj[myIndex].activateList.Add(obj);
+        poolingObj[myIndex].activateList.Add(obj);
     }
 }
 
-public class PullingObj
+public class PoolingObj
 {
     public GameObject parent;
     public GameObject prefab;
-    public int pullingIndex;
+    public int poolingIndex;
     public List<GameObject> activateList = new List<GameObject>();
 
-    public PullingObj(GameObject prefab, int pullingIndex)
+    public PoolingObj(GameObject prefab, int poolingIndex)
     {
         this.prefab = prefab;
-        this.pullingIndex = pullingIndex;
+        this.poolingIndex = poolingIndex;
     }
 }

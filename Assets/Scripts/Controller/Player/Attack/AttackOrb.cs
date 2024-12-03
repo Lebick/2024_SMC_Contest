@@ -7,8 +7,8 @@ public class AttackOrb : MonoBehaviour
 {
     private TrailRenderer trailRenderer;
 
-    private int myPullingIndex;
-    private int getPullingIndex;
+    private int myPoolingIndex;
+    private int getPoolingIndex;
     private Transform targetTransform;
 
     public float moveTime = 0.2f; // 해당 값만큼의 시간동안 적에게 이동
@@ -21,12 +21,12 @@ public class AttackOrb : MonoBehaviour
         trailRenderer = GetComponent<TrailRenderer>();
         trailRenderer.time = moveTime;
 
-        myPullingIndex = ObjectPulling.instance.RegisterObject(hitEffect);
+        myPoolingIndex = ObjectPooling.instance.RegisterObject(hitEffect);
     }
 
-    public void Setting(int pullingIndex, Vector3 startPos, Transform target, float damage)
+    public void Setting(int poolingIndex, Vector3 startPos, Transform target, float damage)
     {
-        this.getPullingIndex = pullingIndex;
+        this.getPoolingIndex = poolingIndex;
         transform.position = startPos;
         targetTransform = target;
         this.damage = damage;
@@ -61,13 +61,13 @@ public class AttackOrb : MonoBehaviour
         {
             enemy.GetDamage(damage);
             
-            AttackHit attackEffect = ObjectPulling.instance.GetObject(myPullingIndex).GetComponent<AttackHit>();
-            attackEffect.Setting(myPullingIndex, transform.position);
+            AttackHit attackEffect = ObjectPooling.instance.GetObject(myPoolingIndex).GetComponent<AttackHit>();
+            attackEffect.Setting(myPoolingIndex, transform.position);
         }
 
         yield return new WaitForSeconds(trailRenderer.time);
 
-        ObjectPulling.instance.SetReadyObject(gameObject, getPullingIndex);
+        ObjectPooling.instance.SetReadyObject(gameObject, getPoolingIndex);
         gameObject.SetActive(false);
     }
 }

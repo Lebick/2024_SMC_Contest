@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class AttackHit : MonoBehaviour
 {
-    private int pullingIndex;
+    private int poolingIndex;
 
-    public void Setting(int pullingIndex, Vector3 summonPos)
+    public void Setting(int poolingIndex, Vector3 summonPos)
     {
-        this.pullingIndex = pullingIndex;
+        this.poolingIndex = poolingIndex;
         transform.position = summonPos;
     }
 
     private void OnParticleSystemStopped()
     {
-        ObjectPulling.instance.SetReadyObject(gameObject, pullingIndex);
+        ObjectPooling.instance.SetReadyObject(gameObject, poolingIndex);
         gameObject.SetActive(false);
     }
 }

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Whirlpool : MonoBehaviour, IPullingObj
+public class Whirlpool : MonoBehaviour, IPoolingObj
 {
-    private int myPullingIndex;
+    private int myPoolingIndex;
 
     private bool isCheckTrigger;
     public float damage;
@@ -22,11 +22,11 @@ public class Whirlpool : MonoBehaviour, IPullingObj
         isCheckTrigger = false;
     }
 
-    public void Setting(int pullingIndex, Vector3 startPos)
+    public void Setting(int poolingIndex, Vector3 startPos)
     {
         isCheckTrigger = true;
 
-        myPullingIndex = pullingIndex;
+        myPoolingIndex = poolingIndex;
         transform.position = startPos;
     }
 
@@ -41,7 +41,7 @@ public class Whirlpool : MonoBehaviour, IPullingObj
 
     private void OnParticleSystemStopped()
     {
-        ObjectPulling.instance.SetReadyObject(gameObject, myPullingIndex);
+        ObjectPooling.instance.SetReadyObject(gameObject, myPoolingIndex);
         gameObject.SetActive(false);
     }
 

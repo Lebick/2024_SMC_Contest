@@ -11972,6 +11972,7 @@ MonoBehaviour:
   pattern2Range: 10
   pattern2Angle: 50
   pattern2Effect: {fileID: 1217240152}
+  pattern3ElectricOrb: {fileID: 0}
   pattern8Whirlpool: {fileID: 1660458996527302088, guid: bd62734582cb7494fa8dfedfefa4e0e4,
     type: 3}
   pattern8Effect: {fileID: 8125671948534452607}
@@ -58663,8 +58664,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2490729824002451551, guid: c27bea8aaa7ed07499ae37da59811707,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3455448959125329132}
   m_SourcePrefab: {fileID: 100100000, guid: c27bea8aaa7ed07499ae37da59811707, type: 3}
+--- !u!1 &3455448959125329131 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2490729824002451551, guid: c27bea8aaa7ed07499ae37da59811707,
+    type: 3}
+  m_PrefabInstance: {fileID: 3455448959125329130}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3455448959125329132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3455448959125329131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b815e0a29f8917439bcb01ca5e344d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!199 &4612705268239611965
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -58750,12 +58773,12 @@ PrefabInstance:
     - target: {fileID: 4337315078013204886, guid: 9722b2d4155f08947a072ce0d2fca509,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.43
+      value: 6.69
       objectReference: {fileID: 0}
     - target: {fileID: 4337315078013204886, guid: 9722b2d4155f08947a072ce0d2fca509,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -4.01
       objectReference: {fileID: 0}
     - target: {fileID: 4337315078013204886, guid: 9722b2d4155f08947a072ce0d2fca509,
         type: 3}

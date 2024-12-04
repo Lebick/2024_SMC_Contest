@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class CameraController : Singleton<CameraController>
 {
@@ -23,10 +24,15 @@ public class CameraController : Singleton<CameraController>
         screenSize.x = screenSize.y * Screen.width / Screen.height;
 
         currentPosition = transform.position;
+
+        GetComponent<PixelPerfectCamera>().refResolutionX = Screen.width;
+        GetComponent<PixelPerfectCamera>().refResolutionY = Screen.height;
     }
 
     private void FixedUpdate()
     {
+        if (GameManager.instance.isPause) return;
+
         FindPlayer();
 
         if (player != null)

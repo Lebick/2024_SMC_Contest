@@ -43,6 +43,8 @@ public class PlayerAttack : MonoBehaviour
     #region FixedUpdate¹®
     private void FixedUpdate()
     {
+        if (GameManager.instance.isPause) return;
+
         GameObject nearestEnemy = GetNearestEnemy();
 
         if (nearestEnemy == null)
@@ -92,6 +94,12 @@ public class PlayerAttack : MonoBehaviour
 
     private void DefaultAttack()
     {
+        if(player.TryGetComponent(out PlayerController controller) && controller.nearestInteraction != null)
+        {
+            controller.nearestInteraction.Interaction();
+            return;
+        }
+
         GameObject attackTarget = GetNearestEnemy();
 
         if (attackTarget == null || attackCurrentCount <= 0) return;

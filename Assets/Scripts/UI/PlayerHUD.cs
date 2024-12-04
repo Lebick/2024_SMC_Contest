@@ -5,14 +5,11 @@ using UnityEngine.UI;
 
 public class PlayerHUD : MonoBehaviour
 {
+    public Text hpText;
     public Image hpFill;
     public Image hpRedFill;
     private float currentHP;
     private float hpDecreaseTimer;
-
-    public Image skill1Fill;
-    public Image skill2Fill;
-    public Image skill3Fill;
 
     public void UpdateHUD(PlayerController player)
     {
@@ -28,10 +25,10 @@ public class PlayerHUD : MonoBehaviour
         }
 
         float hpAmount = (float)player.hp / player.maxHP;
+        hpText.text = $"HP | {hpAmount * player.maxHP} / {player.maxHP}";
+        hpFill.fillAmount = Mathf.Lerp(hpFill.fillAmount, hpAmount, Time.deltaTime * 10f);
 
-        hpFill.fillAmount = hpAmount;
-
-        if(hpDecreaseTimer > 1f)
+        if(hpDecreaseTimer > 0.5f)
             hpRedFill.fillAmount = Mathf.Lerp(hpRedFill.fillAmount, hpAmount, Time.deltaTime * 10f);
         else
             hpDecreaseTimer += Time.deltaTime;

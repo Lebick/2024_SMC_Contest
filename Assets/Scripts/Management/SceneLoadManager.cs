@@ -6,9 +6,17 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
 {
     public GameObject fadeCanvas;
 
-    public void ChangeScene(string sceneName)
+    public int currentSceneIndex;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public void ChangeScene(SceneNames sceneName)
     {
         Instantiate(fadeCanvas).GetComponent<SceneLoad>().LoadScene(sceneName);
+        currentSceneIndex = (int)sceneName;
     }
-    //
 }

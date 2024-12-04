@@ -31,6 +31,8 @@ public class TargetDummy : Controller
 
     protected override void Update()
     {
+        if (GameManager.instance.isPause) return;
+
         base.Update();
 
         //자동회복

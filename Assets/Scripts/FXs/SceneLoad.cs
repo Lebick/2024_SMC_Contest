@@ -5,6 +5,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public enum SceneNames
+{
+    Test = -100,
+    Title = -1,
+    Vilage = 0,
+    AquaBoss = 1
+}
+
 public class SceneLoad : MonoBehaviour
 {
     public RectTransform fadeImage;
@@ -14,9 +22,9 @@ public class SceneLoad : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void LoadScene(string sceneName)
+    public void LoadScene(SceneNames sceneName)
     {
-        StartCoroutine(Fading(sceneName));
+        StartCoroutine(Fading(sceneName.ToString()));
     }
 
     private IEnumerator Fading(string sceneName)
@@ -29,12 +37,6 @@ public class SceneLoad : MonoBehaviour
 
         while (progress <= 1.0f)
         {
-            if (GameManager.instance.isPause)
-            {
-                yield return null;
-                continue;
-            }
-
             progress += Time.deltaTime;
             fadeImage.anchoredPosition = Vector3.Lerp(new(width, 0), new(-width, 0), progress);
 
@@ -62,6 +64,8 @@ public class SceneLoad : MonoBehaviour
         }
 
         yield return null;
+
+        GameManager.instance.isWorldMapPause = false;
 
         Destroy(gameObject);
     }

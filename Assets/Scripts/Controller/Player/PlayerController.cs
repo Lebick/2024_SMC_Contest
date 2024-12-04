@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -14,8 +15,6 @@ public class PlayerController : Controller
         Good, //+-64ms
         Perfect //+-32ms
     }
-
-    //private CircleCollider2D circleCollider;
 
     public PlayerHUD playerHUD;
 
@@ -38,6 +37,9 @@ public class PlayerController : Controller
     private bool isHalfDamage;
     public AudioClip parryingClip;
 
+    public float interactionRange;
+    public IInteractableObj nearestInteraction;
+
     //public ParticleSystem walkDusk;
     //private ParticleSystem.MainModule walkDuskEmission;
 
@@ -54,14 +56,11 @@ public class PlayerController : Controller
         InputValueManager.instance.parryingAction.AddListener(() => ParryingAction());
     }
 
-
     #region Update문
     protected override void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SceneLoadManager.instance.ChangeScene("WorldMap");
-        }
+        if (Input.GetKeyDown(KeyCode.Z))
+            hp -= 5;
 
         if (GameManager.instance.isPause) return;
 
@@ -72,6 +71,8 @@ public class PlayerController : Controller
         UpdateInputValue();
 
         UpdateSkillCoolDown();
+
+        UpdateInteraction();
     }
 
     private void UpdateState()
@@ -92,12 +93,44 @@ public class PlayerController : Controller
             dodgeTimer -= Time.deltaTime;
     }
 
+    private void UpdateInteraction()
+    {
+        Collider2D[] nearObjs = Physics2D.OverlapCircleAll(transform.position, interactionRange);
+
+        if (nearObjs.Length <= 0)
+        {
+            nearestInteraction = null;
+            return;
+        }
+
+        float distance = Mathf.Infinity;
+        bool isExistObj = false;
+
+        foreach(Collider2D obj in nearObjs)
+        {
+            if (obj.TryGetComponent(out IInteractableObj interactableObj))
+            {
+                float currentDistance = Vector3.Distance(transform.position, obj.transform.position);
+                if (currentDistance < distance)
+                    nearestInteraction = interactableObj;
+
+                isExistObj = true;
+            }
+
+            if (!isExistObj)
+                nearestInteraction = null;
+        }
+
+    }
+
     #endregion
 
     #region FixedUpdate문
     private void FixedUpdate()
     {
-        if(isCanMovement)
+        if (GameManager.instance.isPause) return;
+
+        if (isCanMovement)
             UpdateMove();
     }
 
@@ -126,7 +159,9 @@ public class PlayerController : Controller
     #region LateUpdate문
     private void LateUpdate()
     {
-        if(playerHUD != null)
+        if (GameManager.instance.isPause) return;
+
+        if (playerHUD != null)
             playerHUD.UpdateHUD(this);
     }
 
@@ -231,17 +266,19 @@ public class PlayerController : Controller
         {
             case ParryingState.Perfect:
                 SoundManager.instance.PlaySFX(parryingClip, pitch: 0.6f);
+                print("±32ms");
                 break;
 
             case ParryingState.Good:
                 SoundManager.instance.PlaySFX(parryingClip);
                 isHalfDamage = true;
                 damageAction?.Invoke();
+                print("±64ms");
                 break;
 
             case ParryingState.Bad:
-                print("버러지");
                 damageAction?.Invoke();
+                print("실패");
                 break;
         }
     }
@@ -257,5 +294,11 @@ public class PlayerController : Controller
         this.enabled = false;
 
         
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, interactionRange);
     }
 }

@@ -29,7 +29,7 @@ public class Controller : MonoBehaviour
 
     protected virtual void Update()
     {
-
+        if (GameManager.instance.isPause) return;
     }
 
     public virtual void GetDamage(float damage, Vector3 hitObjectPos = new Vector3(), float knockback = 0)

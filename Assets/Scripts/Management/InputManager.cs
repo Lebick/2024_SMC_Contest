@@ -9,19 +9,21 @@ public class InputManager : Singleton<InputManager>
 
     public List<Touch> touch = new();
 
-    public KeyCode[] leftKey      = { KeyCode.A, KeyCode.None };
-    public KeyCode[] downKey      = { KeyCode.S, KeyCode.None };
-    public KeyCode[] rightKey     = { KeyCode.D, KeyCode.None };
-    public KeyCode[] upKey        = { KeyCode.W, KeyCode.None };
-    public KeyCode[] attackKey    = { KeyCode.Mouse0, KeyCode.None };
-    public KeyCode[] dodgeKey     = { KeyCode.Space, KeyCode.None };
-    public KeyCode[] parryingKey  = { KeyCode.Mouse1, KeyCode.None };
+    public KeyCode[] leftKey        = { KeyCode.A, KeyCode.None };
+    public KeyCode[] downKey        = { KeyCode.S, KeyCode.None };
+    public KeyCode[] rightKey       = { KeyCode.D, KeyCode.None };
+    public KeyCode[] upKey          = { KeyCode.W, KeyCode.None };
+    public KeyCode[] attackKey      = { KeyCode.Mouse0, KeyCode.None };
+    public KeyCode[] dodgeKey       = { KeyCode.Space, KeyCode.None };
+    public KeyCode[] parryingKey    = { KeyCode.Mouse1, KeyCode.None };
 
     private float horizontal;
     private float vertical;
 
     private void Update()
     {
+        if (GameManager.instance.isPause) return;
+
         GetTouchPos();
 
         if (isAndroid) return;

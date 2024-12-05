@@ -24,9 +24,12 @@ public class CameraController : Singleton<CameraController>
         screenSize.x = screenSize.y * Screen.width / Screen.height;
 
         currentPosition = transform.position;
+    }
 
-        GetComponent<PixelPerfectCamera>().refResolutionX = Screen.width;
-        GetComponent<PixelPerfectCamera>().refResolutionY = Screen.height;
+    private void Update()
+    {
+        //GetComponent<PixelPerfectCamera>().refResolutionX = Screen.width;
+        //GetComponent<PixelPerfectCamera>().refResolutionY = Screen.height;
     }
 
     private void FixedUpdate()

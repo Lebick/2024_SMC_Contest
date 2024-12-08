@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6950896977798499425}
   - component: {fileID: 7307172729185042259}
   - component: {fileID: 541434187909229587}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -51,7 +51,6 @@ MonoBehaviour:
   damageEffect: {fileID: 0}
   deathEffect: {fileID: 0}
   maxHP: 100
-  hp: 100
   isInvincibility: 0
   playerHUD: {fileID: 0}
   moveSpeed: 5
@@ -60,6 +59,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f1fa831794cc2ff4d8eb8b5aaa7f40cd, type: 3}
   dodgeCD: 0.6
   parryingClip: {fileID: 8300000, guid: 8064ff5e15ea97648b197a1a96b751c9, type: 3}
+  interactionRange: 3
 --- !u!212 &6950896977798499425
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -10,6 +10,8 @@ public class Controller : MonoBehaviour
     protected Rigidbody2D rigidBody;
     protected Animator animator;
 
+    public bool isDeath;
+
     public float maxHP;
     private float _hp;
     public float hp
@@ -45,7 +47,6 @@ public class Controller : MonoBehaviour
         if (deathEffect != null)
             Instantiate(deathEffect, transform.position, Quaternion.identity);
 
-        if("a".Equals("b")) //юс╫ц
-            Destroy(gameObject);
+        isDeath = true;
     }
 }

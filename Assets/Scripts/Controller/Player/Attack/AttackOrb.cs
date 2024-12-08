@@ -43,6 +43,9 @@ public class AttackOrb : MonoBehaviour
         float progress = 0f;
         while (progress < 1f)
         {
+            if (targetTransform == null)
+                break;
+
             if (GameManager.instance.isPause)
             {
                 yield return null;
@@ -57,13 +60,11 @@ public class AttackOrb : MonoBehaviour
             yield return null;
         }
 
-        if(targetTransform.TryGetComponent<Controller>(out Controller enemy) && !enemy.isInvincibility)
-        {
+        if(targetTransform != null && targetTransform.TryGetComponent<Controller>(out Controller enemy) && !enemy.isInvincibility)
             enemy.GetDamage(damage);
-            
-            AttackHit attackEffect = ObjectPooling.instance.GetObject(myPoolingIndex).GetComponent<AttackHit>();
-            attackEffect.Setting(myPoolingIndex, transform.position);
-        }
+
+        AttackHit attackEffect = ObjectPooling.instance.GetObject(myPoolingIndex).GetComponent<AttackHit>();
+        attackEffect.Setting(myPoolingIndex, transform.position);
 
         yield return new WaitForSeconds(trailRenderer.time);
 

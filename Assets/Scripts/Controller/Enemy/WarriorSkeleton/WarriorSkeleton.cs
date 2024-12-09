@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class WarriorSkeleton : EnemyController
 {
@@ -18,6 +18,9 @@ public class WarriorSkeleton : EnemyController
 
     private NavMeshAgent agent;
 
+    public Transform canvas;
+    public Image hpBar;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -28,11 +31,17 @@ public class WarriorSkeleton : EnemyController
     protected override void Update()
     {
         base.Update();
+
+        canvas.transform.localScale = new(transform.localScale.x, 1, 1);
+        hpBar.fillAmount = Mathf.Lerp(hpBar.fillAmount, hp / maxHP, Time.deltaTime * 10f);
     }
 
     private void FixedUpdate()
     {
-        if (player == null) return;
+        if ((GameManager.instance.isPause || isDeath) && !agent.isStopped)
+            agent.isStopped = true;
+
+        if (player == null || isDeath || GameManager.instance.isPause) return;
 
         bool isNearbyPlayer = Vector3.Distance(transform.position, player.position) <= skillUseRange;
 
@@ -78,19 +87,26 @@ public class WarriorSkeleton : EnemyController
 
         skillEffect.Play();
 
-        CircleCollider2D circle = GetComponent<CircleCollider2D>();
-
         Vector2 lastestPos = startPos;
 
         while (progress <= 1f)
         {
+            if (isDeath)
+                break;
+
+            if (GameManager.instance.isPause)
+            {
+                yield return null;
+                continue;
+            }
+
             progress += Time.deltaTime * 2f;
             float acceleration = Mathf.Sqrt(1 - Mathf.Pow(progress - 1, 2));
 
             transform.position = Vector3.Lerp(startPos, targetPos, acceleration);
 
             NavMeshHit hit;
-            bool isOnNavMesh = NavMesh.SamplePosition(transform.position, out hit, 0.1f, NavMesh.AllAreas);
+            bool isOnNavMesh = NavMesh.SamplePosition(transform.position, out hit, 0.5f, NavMesh.AllAreas);
 
             if (!isOnNavMesh) //이동 가능한 영역에서 벗어났으면
             {
@@ -114,5 +130,17 @@ public class WarriorSkeleton : EnemyController
         base.OnDrawGizmos();
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, skillUseRange);
+    }
+
+    protected override void OnDeath()
+    {
+        base.OnDeath();
+        animator.SetTrigger("Death");
+        Invoke(nameof(DestroyObj), (18f / 12f));
+    }
+
+    private void DestroyObj()
+    {
+        Destroy(gameObject);
     }
 }

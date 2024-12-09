@@ -10,6 +10,7 @@ public class EnemyController : Controller
     protected Transform player;
 
     public int enemyIndex;
+    public float damage;
 
     protected override void Update()
     {
@@ -29,6 +30,12 @@ public class EnemyController : Controller
             this.player = player.transform;
             playerFind.Play();
         }
+    }
+
+    public override void GetDamage(float damage, Vector3 hitObjectPos = default, float knockback = 0)
+    {
+        if (isDeath) return;
+        base.GetDamage(damage, hitObjectPos, knockback);
     }
 
     protected override void OnDeath()

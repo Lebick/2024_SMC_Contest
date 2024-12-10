@@ -81,11 +81,9 @@ public class ShielderSkeleton : EnemyController
 
         skillEffect.Play();
 
-        if(Physics2D.OverlapCircle(transform.position, skillEffect.main.startSize.constant, LayerMask.GetMask("Player")).TryGetComponent(out Controller controller))
-        {
-            controller.GetDamage(damage, transform.position, 5f);
-            print("맞어");
-        }
+        if(Physics2D.OverlapCircle(transform.position, skillEffect.main.startSize.constant / 2f, LayerMask.GetMask("Player")))
+            if (Physics2D.OverlapCircle(transform.position, skillEffect.main.startSize.constant / 2f, LayerMask.GetMask("Player")).TryGetComponent(out Controller controller))
+                controller.GetDamage(damage, transform.position, 5f);
 
         //n범위 안 적 공격
 

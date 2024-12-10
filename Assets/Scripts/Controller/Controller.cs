@@ -38,8 +38,36 @@ public class Controller : MonoBehaviour
     {
         hp -= damage;
 
+        Quaternion rotDirection = Quaternion.LookRotation(transform.position - hitObjectPos);
+        Vector2 direction = (transform.position - hitObjectPos).normalized;
+
+        GetKnockback(direction, knockback);
+
         if (hp <= 0)
             OnDeath();
+    }
+
+    public virtual void GetKnockback(Vector2 dir, float knockback, float knockbackReturnTime = 0.5f)
+    {
+        StopCoroutine(SetVelocityZero(dir * knockback));
+        StartCoroutine(SetVelocityZero(dir * knockback));
+    }
+
+    private IEnumerator SetVelocityZero(Vector2 dir)
+    {
+        float progress = 0f;
+
+        Vector3 knockbackDir = dir;
+
+        while(progress <= 1f)
+        {
+            Vector3 newKnockback = knockbackDir * (1 - progress);
+            transform.position += newKnockback * Time.deltaTime * 2f;
+            progress += Time.deltaTime * 2f;
+            yield return null;
+        }
+
+        yield return null;
     }
 
     protected virtual void OnDeath()

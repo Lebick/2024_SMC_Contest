@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5076229137615695005}
   - component: {fileID: 3098746283048128603}
   - component: {fileID: 5625284102385605611}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShielderSkeleton
   m_TagString: Untagged
   m_Icon: {fileID: 0}

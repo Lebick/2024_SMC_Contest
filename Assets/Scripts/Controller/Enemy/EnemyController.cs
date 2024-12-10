@@ -12,6 +12,11 @@ public class EnemyController : Controller
     public int enemyIndex;
     public float damage;
 
+    private void Start()
+    {
+        player = GameManager.instance.player.transform;
+    }
+
     protected override void Update()
     {
         base.Update();

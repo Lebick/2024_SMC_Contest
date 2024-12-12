@@ -15,9 +15,13 @@ public class GameManager : Singleton<GameManager>
 
     public GameObject playerDeathUI;
 
+    public float currentScenePlayTime;
+    public int enemyKillCount;
+    public int visitRoomCount;
+
     protected override void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
             
         base.Awake();
     }
@@ -25,6 +29,11 @@ public class GameManager : Singleton<GameManager>
     private void FixedUpdate()
     {
         isPause = isWorldMapPause || isForcePause || isCutScenePause || isEscapePause || isDialoguePause;
+
+        if (!isPause)
+        {
+            currentScenePlayTime += Time.deltaTime;
+        }
     }
 
     public void OnPlayerDeath()

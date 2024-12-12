@@ -41,7 +41,8 @@ public class EnemyController : Controller
     {
         QuestManager.instance.AddQuestCount(QuestType.EnemyKill, enemyIndex);
         gameObject.layer = 0;
-
+        GameManager.instance.enemyKillCount++;
+        
         base.OnDeath();
     }
 

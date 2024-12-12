@@ -18,6 +18,8 @@ public class BuffInfo : ScriptableObject
     public string constraints;
     public UnityEvent buffAction;
 
+    public bool isCantKeep;
+
     public void Initialize(string description, float attack, float armor, float criticalChange, float criticalDamage, float maxHP)
     {
         this.buffDescription = description;

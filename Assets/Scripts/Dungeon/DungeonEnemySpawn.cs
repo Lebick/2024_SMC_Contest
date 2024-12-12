@@ -24,6 +24,7 @@ public class DungeonEnemySpawn : MonoBehaviour
         if(Physics2D.OverlapBox(transform.position + mapCenter, mapSize, 0, LayerMask.GetMask("Player")) && !isSummon)
         {
             isSummon = true;
+            GameManager.instance.visitRoomCount++;
             exit.SetActive(true);
             StartCoroutine(SummonEnemy());
         }

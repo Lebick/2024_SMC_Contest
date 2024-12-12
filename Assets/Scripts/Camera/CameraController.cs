@@ -45,7 +45,7 @@ public class CameraController : Singleton<CameraController>
     private void FindPlayer()
     {
         if (player == null && GameManager.instance != null)
-            player = GameManager.instance.player.transform;
+            player = UsefulObjectManager.instance.player.transform;
     }
 
     private void FollowPlayer()

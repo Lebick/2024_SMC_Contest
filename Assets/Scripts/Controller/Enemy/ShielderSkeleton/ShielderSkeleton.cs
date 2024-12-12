@@ -74,6 +74,7 @@ public class ShielderSkeleton : EnemyController
 
     private IEnumerator UseSkill()
     {
+        warningEffect.Play();
         yield return null;
         animator.SetTrigger("Skill");
 

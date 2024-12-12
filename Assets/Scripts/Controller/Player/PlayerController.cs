@@ -37,6 +37,8 @@ public class PlayerController : Controller
     private bool isHalfDamage;
     public AudioClip parryingClip;
 
+    public float armorStrength;
+
     public float interactionRange;
     public IInteractableObj nearestInteraction;
 
@@ -59,6 +61,11 @@ public class PlayerController : Controller
     #region Update¹®
     protected override void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+            hp = 0;
+
+        if (isDeath) return;
+
         if (Input.GetKeyDown(KeyCode.Z))
             hp -= 5;
 
@@ -128,6 +135,8 @@ public class PlayerController : Controller
     #region FixedUpdate¹®
     private void FixedUpdate()
     {
+        if (isDeath) return;
+
         if (GameManager.instance.isPause) return;
 
         if (isCanMovement)
@@ -159,6 +168,8 @@ public class PlayerController : Controller
     #region LateUpdate¹®
     private void LateUpdate()
     {
+        if (isDeath) return;
+
         if (GameManager.instance.isPause) return;
 
         if (playerHUD != null)
@@ -169,7 +180,9 @@ public class PlayerController : Controller
 
     private void DodgeAction()
     {
-        if(dodgeTimer <= 0)
+        if (isDeath) return;
+
+        if (dodgeTimer <= 0)
         {
             dodgeTimer = dodgeCD;
 
@@ -201,7 +214,6 @@ public class PlayerController : Controller
 
     private void ParryingAction()
     {
-
         if (isParrying) return;
 
         isParrying = true;
@@ -220,18 +232,26 @@ public class PlayerController : Controller
         }
 
         parryingState = ParryingState.Bad;
+
+        yield return new WaitForSecondsRealtime(0.1f);
         isParrying = false;
     }
 
-    public override void GetDamage(float damage, Vector3 hitObjectPos, float knockback)
+    public override void GetDamage(float damage, Vector3 hitObjectPos, float knockback, bool isCritical = false)
     {
         if (isInvincibility) return;
+        if (isDeath) return;
 
         StartCoroutine(CheckParryingState(() =>
         {
             float value = isHalfDamage ? 0.5f : 1f;
-            base.GetDamage(damage * value, hitObjectPos, knockback * value);
 
+            float finalValue = (damage * value) - armorStrength;
+
+            if(finalValue > 0)
+                base.GetDamage(damage * value, hitObjectPos, knockback * value);
+
+            isParrying = false;
             isHalfDamage = false;
         }));
     }
@@ -285,15 +305,26 @@ public class PlayerController : Controller
 
     protected override void OnDeath()
     {
+        if (isDeath) return;
+
+        isDeath = true;
+
         Instantiate(deathEffect, transform.position, Quaternion.identity);
         foreach(MonoBehaviour script in GetComponents<MonoBehaviour>())
         {
-            if(script == this)
+            if(script != this)
                 script.enabled = false;
         }
-        this.enabled = false;
+        transform.Find("Sprite").GetComponent<SpriteRenderer>().enabled = false;
+        playerHUD.UpdateHUD(this);
+        Invoke(nameof(DeathWait), 2f);
 
-        
+        this.enabled = false;
+    }
+
+    private void DeathWait()
+    {
+        SceneLoadManager.instance.ChangeScene(SceneNames.Village);
     }
 
     private void OnDrawGizmos()

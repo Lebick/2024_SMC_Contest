@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 
 public class Minimap : MonoBehaviour
 {
@@ -13,6 +14,17 @@ public class Minimap : MonoBehaviour
     public Transform[] allMap;
 
     public Tile whiteTile;
+    public GameObject enemyPos;
+    public List<Controller> enemys = new();
+    public List<GameObject> enemyPoses = new();
+
+    private Transform player;
+    public Transform playerPos;
+
+    private void Start()
+    {
+        player = UsefulObjectManager.instance.player.transform;
+    }
 
     private void Update()
     {
@@ -20,7 +32,9 @@ public class Minimap : MonoBehaviour
 
         SetMiniMapTile();
 
+        GetEnemyPos();
         SetEnemyPos();
+        SetPlayerPos();
     }
 
     private void FindCurrentMap()
@@ -69,8 +83,40 @@ public class Minimap : MonoBehaviour
         return filledPositions;
     }
 
+    private void GetEnemyPos()
+    {
+        if (currentMap.transform.parent.Find("Enemys") == null) return;
+
+        if(enemys.Count != currentMap.transform.parent.Find("Enemys").GetComponentsInChildren<Controller>().ToList().Count)
+        {
+            enemys = currentMap.transform.parent.Find("Enemys").GetComponentsInChildren<Controller>().ToList();
+            GameObject pos = Instantiate(enemyPos, transform);
+            enemyPoses.Add(pos);
+        }
+
+        for(int i=0; i<enemys.Count; i++)
+        {
+            enemyPoses[i].transform.localPosition = enemys[i].transform.localPosition;
+        }
+    }
+
     private void SetEnemyPos()
     {
+        for(int i=0; i< enemyPoses.Count; i++)
+        {
+            try
+            {
+                enemyPoses[i].transform.localPosition = enemys[i].transform.localPosition;
+            }
+            catch
+            {
 
+            }
+        }
+    }
+
+    private void SetPlayerPos()
+    {
+        playerPos.localPosition = player.position - currentMap.transform.position;
     }
 }

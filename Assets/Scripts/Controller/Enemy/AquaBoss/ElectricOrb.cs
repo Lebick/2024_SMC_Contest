@@ -11,7 +11,7 @@ public class ElectricOrb : MonoBehaviour
 
     private void Start()
     {
-        player = GameManager.instance.player.transform;
+        player = UsefulObjectManager.instance.player.transform;
         Setting(3, Vector3.zero, 69);
     }
 

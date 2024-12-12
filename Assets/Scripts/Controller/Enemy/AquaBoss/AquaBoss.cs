@@ -463,7 +463,7 @@ public class AquaBoss : Controller
             return (Vector3)hit.point - detectOffset - (Vector3)circleCollider.offset;
     }
 
-    public override void GetDamage(float damage, Vector3 hitObjectPos = default, float knockback = 0)
+    public override void GetDamage(float damage, Vector3 hitObjectPos = default, float knockback = 0, bool isCritical = false)
     {
         base.GetDamage(damage, hitObjectPos, knockback);
     }

@@ -29,6 +29,9 @@ public class PlayerAttack : MonoBehaviour
     public  float   attackCD;
     public float   attackTimer;
 
+    public float criticalChance;
+    public float criticalDamage = 100f;
+
     // ----------------------------------------
 
     private void Start()
@@ -108,8 +111,12 @@ public class PlayerAttack : MonoBehaviour
 
         SoundManager.instance.PlaySFX(attackClips[Random.Range(0, attackClips.Length)], 0.1f);
 
+        bool isCritical = Random.Range(0f, 100f) <= criticalChance;
+
+        float fianlDamage = damage * (isCritical ? (criticalDamage / 100f) : 1f);
+
         AttackOrb orb = ObjectPooling.instance.GetObject(myPoolingIndex).GetComponent<AttackOrb>();
-        orb.Setting(myPoolingIndex, transform.position, attackTarget.transform, damage);
+        orb.Setting(myPoolingIndex, transform.position, attackTarget.transform, fianlDamage, isCritical);
     }
 
     private GameObject GetNearestEnemy()

@@ -14,6 +14,12 @@ public class PlayerHUD : MonoBehaviour
     public void UpdateHUD(PlayerController player)
     {
         UpdateHPValue(player);
+
+        if(player.hp <= 0)
+        {
+            hpRedFill.fillAmount = 0;
+            hpFill.fillAmount = 0;
+        }
     }
 
     private void UpdateHPValue(PlayerController player)

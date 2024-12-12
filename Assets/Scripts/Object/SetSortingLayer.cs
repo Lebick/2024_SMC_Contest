@@ -16,7 +16,7 @@ public class SetSortingLayer : MonoBehaviour
     private void Update()
     {
         if (player == null && GameManager.instance != null)
-            player = GameManager.instance.player.transform;
+            player = UsefulObjectManager.instance.player.transform;
 
         if(player != null)
         {

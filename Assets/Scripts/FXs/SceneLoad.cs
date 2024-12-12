@@ -9,8 +9,9 @@ public enum SceneNames
 {
     Test = -100,
     Title = -1,
-    Vilage = 0,
-    AquaBoss = 1
+    Village = 0,
+    AquaBoss = 1,
+    DefaultDungeon = 2
 }
 
 public class SceneLoad : MonoBehaviour
@@ -66,6 +67,7 @@ public class SceneLoad : MonoBehaviour
         yield return null;
 
         GameManager.instance.isWorldMapPause = false;
+        GameManager.instance.isCutScenePause = false;
 
         Destroy(gameObject);
     }

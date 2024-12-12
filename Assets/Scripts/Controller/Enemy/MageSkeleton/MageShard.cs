@@ -13,9 +13,13 @@ public class MageShard : MonoBehaviour
 
     private Vector2 dir;
 
-    private void Start()
+    private float damage;
+
+    public void Setting(float damage)
     {
-        player = GameManager.instance.player.transform;
+        this.damage = damage;
+
+        player = UsefulObjectManager.instance.player.transform;
         Destroy(gameObject, readyTime + 2f);
     }
 
@@ -33,6 +37,14 @@ public class MageShard : MonoBehaviour
 
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             transform.localEulerAngles = new(0, 0, angle);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.TryGetComponent(out PlayerController player))
+        {
+            player.GetDamage(damage, player.transform.position - (Vector3)dir, 3f);
         }
     }
 }

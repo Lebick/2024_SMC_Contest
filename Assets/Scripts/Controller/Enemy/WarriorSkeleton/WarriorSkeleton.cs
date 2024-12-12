@@ -13,6 +13,7 @@ public class WarriorSkeleton : EnemyController
     public float skillDistance;
 
     private bool isUsingSkill;
+    private bool isAttacking;
 
     public ParticleSystem skillEffect;
 
@@ -76,6 +77,7 @@ public class WarriorSkeleton : EnemyController
 
     private IEnumerator UseSkill()
     {
+        warningEffect.Play();
         yield return null;
         animator.SetTrigger("Skill");
         yield return new WaitForSeconds(25f / 60f);
@@ -88,7 +90,7 @@ public class WarriorSkeleton : EnemyController
         skillEffect.Play();
 
         Vector2 lastestPos = startPos;
-
+        isAttacking = true;
         while (progress <= 1f)
         {
             if (isDeath)
@@ -118,6 +120,7 @@ public class WarriorSkeleton : EnemyController
 
             yield return null;
         }
+        isAttacking = false;
         skillEffect.Stop();
 
         yield return new WaitForSeconds((20f / 60f) - (1f - progress) / 2f);
@@ -142,5 +145,13 @@ public class WarriorSkeleton : EnemyController
     private void DestroyObj()
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent(out PlayerController player) && isAttacking)
+        {
+            player.GetDamage(damage, transform.position, 6f);
+        }
     }
 }

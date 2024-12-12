@@ -4,18 +4,13 @@ using UnityEngine;
 
 public class EnemyController : Controller
 {
-    public ParticleSystem playerFind;
+    public ParticleSystem warningEffect;
 
     public float playerDetectRange;
     protected Transform player;
 
     public int enemyIndex;
     public float damage;
-
-    private void Start()
-    {
-        player = GameManager.instance.player.transform;
-    }
 
     protected override void Update()
     {
@@ -27,17 +22,16 @@ public class EnemyController : Controller
 
     private void FindPlayer()
     {
+        this.player = UsefulObjectManager.instance.player.transform;
         Collider2D player = Physics2D.OverlapCircle(transform.position, playerDetectRange, LayerMask.GetMask("Player"));
 
+        
 
         if (player != null)
-        {
             this.player = player.transform;
-            playerFind.Play();
-        }
     }
 
-    public override void GetDamage(float damage, Vector3 hitObjectPos = default, float knockback = 0)
+    public override void GetDamage(float damage, Vector3 hitObjectPos = default, float knockback = 0, bool isCritical = false)
     {
         if (isDeath) return;
         base.GetDamage(damage, hitObjectPos, knockback);
@@ -46,7 +40,7 @@ public class EnemyController : Controller
     protected override void OnDeath()
     {
         QuestManager.instance.AddQuestCount(QuestType.EnemyKill, enemyIndex);
-
+        print("ÀÌÈ÷Èþ");
         gameObject.layer = 0;
 
         base.OnDeath();

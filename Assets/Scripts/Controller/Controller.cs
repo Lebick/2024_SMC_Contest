@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Controller : MonoBehaviour
@@ -34,9 +35,15 @@ public class Controller : MonoBehaviour
         if (GameManager.instance.isPause) return;
     }
 
-    public virtual void GetDamage(float damage, Vector3 hitObjectPos = new Vector3(), float knockback = 0)
+    public virtual void GetDamage(float damage, Vector3 hitObjectPos = new Vector3(), float knockback = 0, bool isCritical = false)
     {
         hp -= damage;
+
+        Text damageText = Instantiate(UsefulObjectManager.instance.damageText, UsefulObjectManager.instance.worldCanvasTr).GetComponent<Text>();
+        damageText.color = isCritical ? Color.yellow : Color.red;
+        damageText.text = $"-{damage}";
+
+        damageText.transform.position = transform.position + Vector3.up;
 
         Quaternion rotDirection = Quaternion.LookRotation(transform.position - hitObjectPos);
         Vector2 direction = (transform.position - hitObjectPos).normalized;

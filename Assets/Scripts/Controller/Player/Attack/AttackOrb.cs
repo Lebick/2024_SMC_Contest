@@ -16,6 +16,8 @@ public class AttackOrb : MonoBehaviour
 
     private float damage;
 
+    private bool isCritical;
+
     private void Start()
     {
         trailRenderer = GetComponent<TrailRenderer>();
@@ -24,12 +26,13 @@ public class AttackOrb : MonoBehaviour
         myPoolingIndex = ObjectPooling.instance.RegisterObject(hitEffect);
     }
 
-    public void Setting(int poolingIndex, Vector3 startPos, Transform target, float damage)
+    public void Setting(int poolingIndex, Vector3 startPos, Transform target, float damage, bool isCritical)
     {
         this.getPoolingIndex = poolingIndex;
         transform.position = startPos;
         targetTransform = target;
         this.damage = damage;
+        this.isCritical = isCritical;
 
         StartCoroutine(FollowTarget());
     }
@@ -61,7 +64,7 @@ public class AttackOrb : MonoBehaviour
         }
 
         if(targetTransform != null && targetTransform.TryGetComponent<Controller>(out Controller enemy) && !enemy.isInvincibility)
-            enemy.GetDamage(damage);
+            enemy.GetDamage(damage, isCritical: isCritical);
 
         AttackHit attackEffect = ObjectPooling.instance.GetObject(myPoolingIndex).GetComponent<AttackHit>();
         attackEffect.Setting(myPoolingIndex, transform.position);

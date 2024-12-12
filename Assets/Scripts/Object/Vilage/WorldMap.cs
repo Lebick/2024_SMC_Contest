@@ -30,7 +30,7 @@ public class WorldMap : MonoBehaviour
                 signPos = testBtn.anchoredPosition;
                 break;
 
-            case SceneNames.Vilage:
+            case SceneNames.Village:
                 signPos = vilageBtn.anchoredPosition;
                 break;
 

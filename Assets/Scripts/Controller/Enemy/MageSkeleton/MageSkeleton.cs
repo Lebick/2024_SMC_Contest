@@ -75,6 +75,7 @@ public class MageSkeleton : EnemyController
 
     private IEnumerator UseSkill()
     {
+        warningEffect.Play();
         yield return null;
         animator.SetTrigger("Skill");
         yield return new WaitForSeconds(30f / 60f);
@@ -90,7 +91,8 @@ public class MageSkeleton : EnemyController
                 continue;
             }
 
-            Instantiate(shardPrefab, shardPos[i].position, Quaternion.identity);
+            GameObject shard = Instantiate(shardPrefab, shardPos[i].position, Quaternion.identity);
+            shard.GetComponent<MageShard>().Setting(damage);
             yield return new WaitForSeconds(24f / shardPos.Length / 60f); 
         }
 

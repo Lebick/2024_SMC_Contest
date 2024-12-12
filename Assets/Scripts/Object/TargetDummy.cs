@@ -18,10 +18,10 @@ public class TargetDummy : Controller
 
     private void Start()
     {
-        player = GameManager.instance.player.transform;
+        player = UsefulObjectManager.instance.player.transform;
     }
 
-    public override void GetDamage(float damage, Vector3 hitObjectPos = default, float knockback = 0)
+    public override void GetDamage(float damage, Vector3 hitObjectPos = default, float knockback = 0, bool isCritical = false)
     {
         base.GetDamage(damage, hitObjectPos, knockback);
 

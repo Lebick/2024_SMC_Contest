@@ -8,9 +8,13 @@ public class ArcherArrow : MonoBehaviour
 
     public float speed;
 
-    private void Start()
+    private float damage;
+
+    public void Setting(float damage)
     {
-        dir = (GameManager.instance.player.transform.position - transform.position).normalized;
+        this.damage = damage;
+
+        dir = (UsefulObjectManager.instance.player.transform.position - transform.position).normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         transform.localEulerAngles = new(0, 0, angle);
@@ -23,5 +27,13 @@ public class ArcherArrow : MonoBehaviour
         if (GameManager.instance.isPause) return;
 
         transform.position += dir * speed * Time.fixedDeltaTime;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent(out PlayerController player))
+        {
+            player.GetDamage(damage, player.transform.position - dir, 3f);
+        }
     }
 }

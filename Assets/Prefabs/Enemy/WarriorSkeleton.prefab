@@ -5449,9 +5449,10 @@ MonoBehaviour:
   isDeath: 0
   maxHP: 50
   isInvincibility: 0
-  playerFind: {fileID: 431402023536579308}
+  warningEffect: {fileID: 431402023536579308}
   playerDetectRange: 5
   enemyIndex: 2
+  damage: 10
   skillCD: 3
   skillUseRange: 4
   skillDistance: 5
@@ -5798,7 +5799,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
   randomSeed: 0

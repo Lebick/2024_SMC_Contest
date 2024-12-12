@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class NPC : MonoBehaviour, IInteractableObj
 {
+    public string myName;
+
     public bool isExistQuest;
     public bool isSuccessQuest;
 
@@ -26,7 +28,7 @@ public class NPC : MonoBehaviour, IInteractableObj
         if (!GameManager.instance.isPause)
         {
             speechBubble.SetActive(isExistQuest || isSuccessQuest);
-            speechBubbleText.text = ". . .";
+            speechBubbleText.text = " ! ";
         }
 
         if (myQuests.Count <= 0)
@@ -87,5 +89,10 @@ public class NPC : MonoBehaviour, IInteractableObj
         GameManager.instance.isDialoguePause = false;
 
         yield return null;
+    }
+
+    public string GetName()
+    {
+        return myName;
     }
 }

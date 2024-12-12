@@ -12,6 +12,8 @@ public class QuestList : MonoBehaviour
 
     private void Update()
     {
+        transform.GetChild(0).gameObject.SetActive(quests.Count > 0);
+
         UpdateQuestCount();
 
         UpdateQuestInfo();

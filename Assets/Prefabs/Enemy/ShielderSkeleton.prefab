@@ -107,7 +107,7 @@ MonoBehaviour:
   isDeath: 0
   maxHP: 50
   isInvincibility: 0
-  playerFind: {fileID: 976807412140647617}
+  warningEffect: {fileID: 976807412140647617}
   playerDetectRange: 6
   enemyIndex: 4
   damage: 10
@@ -5362,7 +5362,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
   randomSeed: 0

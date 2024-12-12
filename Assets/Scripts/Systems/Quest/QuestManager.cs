@@ -15,10 +15,15 @@ public class QuestManager : Singleton<QuestManager>
 
     public List<Quest> completeQuests; //완료한 퀘스트들
 
+    private void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     public void AddQuestCount(QuestType type, int index)
     {
         foreach(Quest quest in currentQuests)
-            if(quest.questType == type && quest.questTargetIndex == index)
+            if(quest.questType == type && (quest.questTargetIndex == index || quest.questTargetIndex == -1))
                 quest.questCurrentCount++;
     }
 }

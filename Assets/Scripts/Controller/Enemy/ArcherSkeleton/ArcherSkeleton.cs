@@ -76,6 +76,7 @@ public class ArcherSkeleton : EnemyController
     private IEnumerator UseSkill()
     {
         yield return null;
+        warningEffect.Play();
         animator.SetTrigger("Skill");
 
         float timer = 0f;
@@ -94,7 +95,8 @@ public class ArcherSkeleton : EnemyController
 
         yield return new WaitForSeconds(70f / 30f);
 
-        Instantiate(arrow, arrowSpawnPos.position, arrowSpawnPos.rotation);
+        GameObject arrow = Instantiate(this.arrow, arrowSpawnPos.position, arrowSpawnPos.rotation);
+        arrow.GetComponent<ArcherArrow>().Setting(damage);
 
         yield return new WaitForSeconds(35f / 30f);
 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8324625878365464699}
   - component: {fileID: 975143024614729314}
   - component: {fileID: 5435183117005663984}
+  - component: {fileID: -6708365049606336289}
   m_Layer: 0
   m_Name: Shard
   m_TagString: Untagged
@@ -100,6 +101,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 15
   readyTime: 1
+--- !u!58 &-6708365049606336289
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183988727292969699}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.25
 --- !u!1 &8372904740152892656
 GameObject:
   m_ObjectHideFlags: 0

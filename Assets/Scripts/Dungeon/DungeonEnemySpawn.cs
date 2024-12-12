@@ -17,7 +17,7 @@ public class DungeonEnemySpawn : MonoBehaviour
 
     private bool isSummon;
     private bool isAllEnemySpawn;
-    private List<GameObject> summonedEnemys = new();
+    public List<GameObject> summonedEnemys = new();
 
     private void Update()
     {
@@ -67,8 +67,7 @@ public class DungeonEnemySpawn : MonoBehaviour
             }
 
             GameObject enemy = Instantiate(enemySpawnEffect, transform.position + randomPos, Quaternion.identity, enemyParent);
-            enemy.GetComponent<EnemySpawn>().Setting(summonEnemyList[i], enemyParent);
-            summonedEnemys.Add(enemy);
+            enemy.GetComponent<EnemySpawn>().Setting(summonEnemyList[i], enemyParent, this);
             yield return new WaitForSeconds(Random.Range(0.1f, 0.3f));
         }
         yield return null;

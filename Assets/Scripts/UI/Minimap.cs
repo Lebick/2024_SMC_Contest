@@ -87,16 +87,28 @@ public class Minimap : MonoBehaviour
     {
         if (currentMap.transform.parent.Find("Enemys") == null) return;
 
-        if(enemys.Count != currentMap.transform.parent.Find("Enemys").GetComponentsInChildren<Controller>().ToList().Count)
+        int currentEnemyCount = currentMap.transform.parent.Find("Enemys").GetComponentsInChildren<Controller>().ToList().Count;
+        enemys = currentMap.transform.parent.Find("Enemys").GetComponentsInChildren<Controller>().ToList();
+
+        if (enemys.Count > enemyPoses.Count)
         {
-            enemys = currentMap.transform.parent.Find("Enemys").GetComponentsInChildren<Controller>().ToList();
             GameObject pos = Instantiate(enemyPos, transform);
             enemyPoses.Add(pos);
         }
-
-        for(int i=0; i<enemys.Count; i++)
+        else if(enemys.Count < enemyPoses.Count)
         {
-            enemyPoses[i].transform.localPosition = enemys[i].transform.localPosition;
+            Destroy(enemyPoses[0]);
+            enemyPoses.RemoveAt(0);
+        }
+
+        for (int i=0; i<enemys.Count; i++)
+        {
+            try
+            {
+                enemyPoses[i].transform.localPosition = enemys[i].transform.localPosition;
+            }
+            catch { }
+            
         }
     }
 

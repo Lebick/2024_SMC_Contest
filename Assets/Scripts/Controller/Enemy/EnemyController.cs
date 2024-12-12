@@ -40,7 +40,6 @@ public class EnemyController : Controller
     protected override void OnDeath()
     {
         QuestManager.instance.AddQuestCount(QuestType.EnemyKill, enemyIndex);
-        print("ÀÌÈ÷Èþ");
         gameObject.layer = 0;
 
         base.OnDeath();

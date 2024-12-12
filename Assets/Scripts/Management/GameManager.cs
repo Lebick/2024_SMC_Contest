@@ -13,6 +13,8 @@ public class GameManager : Singleton<GameManager>
 
     public bool isPause;            //위 사항 중 하나라도 포함 시 일시정지
 
+    public GameObject playerDeathUI;
+
     protected override void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -23,5 +25,11 @@ public class GameManager : Singleton<GameManager>
     private void FixedUpdate()
     {
         isPause = isWorldMapPause || isForcePause || isCutScenePause || isEscapePause || isDialoguePause;
+    }
+
+    public void OnPlayerDeath()
+    {
+        isForcePause = true;
+        playerDeathUI.SetActive(true);
     }
 }

@@ -19,6 +19,8 @@ public class DungeonEnemySpawn : MonoBehaviour
     private bool isAllEnemySpawn;
     public List<GameObject> summonedEnemys = new();
 
+    public bool isBattleEnd;
+
     private void Update()
     {
         if(Physics2D.OverlapBox(transform.position + mapCenter, mapSize, 0, LayerMask.GetMask("Player")) && !isSummon)
@@ -41,6 +43,7 @@ public class DungeonEnemySpawn : MonoBehaviour
         if (isAllEnemySpawn && summonedEnemys.Count <= 0)
         {
             exit.SetActive(false);
+            isBattleEnd = true;
         }
     }
 

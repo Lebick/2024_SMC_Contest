@@ -15,6 +15,7 @@ public class BuffInfo : ScriptableObject
     public float criticalDamage;
     public float maxHP;
 
+    [TextArea]
     public string constraints;
     public UnityEvent buffAction;
 

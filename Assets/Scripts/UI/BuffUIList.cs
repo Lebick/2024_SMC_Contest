@@ -58,7 +58,7 @@ public class BuffUIList : MonoBehaviour
 
             value.text = $"공격력 +{buff.attackStrength}\t\t방어력+{buff.armorStrength}\n" +
                         $"치명타 확률 +{buff.criticalChance}%\t\t치명타 피해 +{buff.criticalDamage}%\n" +
-                        $"{(buff.constraints != string.Empty ? "제약 조건 : {buff.constraints}" : string.Empty)}";
+                        $"{(buff.constraints != string.Empty ? $"제약 조건 : {buff.constraints}" : string.Empty)}";
         }
     }
 }

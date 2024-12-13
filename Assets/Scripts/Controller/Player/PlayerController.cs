@@ -42,6 +42,11 @@ public class PlayerController : Controller
     public float interactionRange;
     public IInteractableObj nearestInteraction;
 
+    public float xp;
+    public float maxXP;
+    private float levelUPCount;
+    public LevelUPUI levelUPUI;
+
     //public ParticleSystem walkDusk;
     //private ParticleSystem.MainModule walkDuskEmission;
 
@@ -61,15 +66,17 @@ public class PlayerController : Controller
     #region Update¹®
     protected override void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-            hp = 0;
-
         if (isDeath) return;
 
-        if (Input.GetKeyDown(KeyCode.Z))
-            hp -= 5;
-
         if (GameManager.instance.isPause) return;
+
+        if(Input.GetKeyDown(KeyCode.R) && levelUPCount > 0)
+        {
+            levelUPCount--;
+            GameManager.instance.isForcePause = true;
+            levelUPUI.Setting();
+
+        }
 
         base.Update();
 
@@ -331,5 +338,16 @@ public class PlayerController : Controller
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, interactionRange);
+    }
+
+    public void GetXP(float value)
+    {
+        xp += value;
+
+        if(xp >= maxXP)
+        {
+            xp -= maxXP;
+            levelUPCount++;
+        }
     }
 }

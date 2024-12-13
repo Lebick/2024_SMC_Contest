@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c42a48a45d305d040b40a0acb0e505fa, type: 3}
+  m_Name: SandPouch
+  m_EditorClassIdentifier: 
+  buffDescription: "\uBAA8\uB798\uC8FC\uBA38\uB2C8"
+  attackStrength: -5
+  armorStrength: -5
+  criticalChance: -5
+  criticalDamage: -5
+  maxHP: -5
+  constraints: "5\uAC1C\uC758 \uBC29\uC744 \uC9C0\uB09C \uB4A4, \uBAA8\uB4E0 \uB2A5\uB825\uCE58\uAC00
+    10 \uC624\uB978\uB2E4."
+  buffAction:
+    m_PersistentCalls:
+      m_Calls: []
+  isCantKeep: 0

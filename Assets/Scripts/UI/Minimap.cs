@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEditor.PlayerSettings;
 
-public class Minimap : MonoBehaviour
+public class Minimap : Singleton<Minimap>
 {
     public Tilemap miniMapTile;
     private Tilemap lastestMap;

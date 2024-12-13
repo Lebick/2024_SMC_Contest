@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c42a48a45d305d040b40a0acb0e505fa, type: 3}
+  m_Name: All_In
+  m_EditorClassIdentifier: 
+  buffDescription: "\uC62C\uC778"
+  attackStrength: 0
+  armorStrength: 0
+  criticalChance: 0
+  criticalDamage: 0
+  maxHP: 0
+  constraints: "\uBAA8\uB4E0 \uB2A5\uB825\uCE58 1.5\uBC30. \uC774\uBC88 \uD0D0\uC0AC\uC5D0\uC11C
+    \uBC84\uD504 \uC800\uC7A5 \uBD88\uAC00."
+  buffAction:
+    m_PersistentCalls:
+      m_Calls: []
+  isCantKeep: 0
